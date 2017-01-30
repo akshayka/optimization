@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Meeting Notes [Boyd, Diamond] [9/26/16] &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Meeting Notes [Boyd, Diamond] [9/26/16]</h1>
+  <span class="post-date">26 Sep 2016</span>
+  <div class="tags">
+    
+      [<a href="/tags#meetings" class="tag">meetings</a>]
+    
+      [<a href="/tags#boyd" class="tag">boyd</a>]
+    
+      [<a href="/tags#diamond" class="tag">diamond</a>]
+    
+  </div>
+  <br/>
+  <p>Sept 26 2016
+Boyd
+Diamond
+Agrawal</p>
+
+<p>Investigating alternate methods of solving LPs and SOCPs.</p>
+
+<ul>
+  <li>Cutting plane methods</li>
+  <li>Proximal methods</li>
+  <li>An analog of conjugate gradients?</li>
+  <li>AA^T to solve linear system, A = 10 rows by 10 Million Columns</li>
+  <li>Alternating projections while retaining inequalities (affine and conic subspace)</li>
+  <li>Alternating projections while retaining a limited number of inequalities or sketching the inequalities</li>
+  <li>Alternating projections or some other algorithm that solves a series of QCQPs to solve an SOCP (project onto a polyhedron, or onto a convex hull of inequalities)</li>
+  <li>The catchmark algorithm applied to SOCPs</li>
+  <li>A randomized approach to solving or approximating LPs or QCQPs</li>
+  <li><script type="math/tex">Ax = b, a_jx = b_j</script> (random <script type="math/tex">j</script>), project <script type="math/tex">x_k</script> onto that hyperplane to get <script type="math/tex">x_{k+1}</script></li>
+</ul>
+
+<p>LBFGS
+catchmark (?)</p>
+
+<p>conditional gradient programs</p>
+
+<p>Pontus</p>
+
+<p>non-expansive operator and fixed points</p>
+
+<p>2nd order methods are metric invariant
+first order methods have variable metrics (must find the right metric – norm should probably make subspaces round ish)</p>
+
+<p>second order cone – diag plus rank 1</p>
+
+<p>question: log-barrier and self-concordance?</p>
+
+<p>Theme: Resurrecting methods from the 50’s and applying them to solving SOCPs or LPs in order to (1) better understand the power of these methods and (2) better understand the hard-ness of these optimizing these types of programs.</p>
+
+<p>NB: A wide body of research into SOCPs has already been conducted.<br />
+Personal interest: I am interested in problems in which trade-offs must be made. In particular, I am currently interested in the trade-off between correctness and computational feasibility, as measured in time and/or space.</p>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/12/07/ap-first-results/">
+            First results for alternating projection acceleration
+            <small>07 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/visual-checklist/">
+            Checklist
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/qp-alt-proj/">
+            Literature Review: QP + Alternating Projections
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

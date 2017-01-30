@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Bauschke Survey on Projection Algorithms &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Bauschke Survey on Projection Algorithms</h1>
+  <span class="post-date">09 Nov 2016</span>
+  <div class="tags">
+    
+      [<a href="/tags#bauschke" class="tag">bauschke</a>]
+    
+      [<a href="/tags#borwein" class="tag">borwein</a>]
+    
+      [<a href="/tags#feasibility" class="tag">feasibility</a>]
+    
+      [<a href="/tags#projections" class="tag">projections</a>]
+    
+  </div>
+  <br/>
+  <p><a href="/papers/Projection Methods and Monotone Operators.pdf">Source: Bauschke’s Projection Methods and Monotone Operators</a></p>
+
+<h3 id="preliminaries">Preliminaries</h3>
+<p>A mapping <script type="math/tex">T</script> is a <strong>non-expansive operator</strong> if it is always true that</p>
+
+<script type="math/tex; mode=display">\norm{Tx - Ty} \leq \norm{x - y}.</script>
+
+<p>It is <em>strictly</em> non-expansive if the above inequality is strict, and it
+is an <strong>isometry</strong> if the relation always holds with equality. The set
+of <strong>fixed points</strong> of a non-expansive mapping <script type="math/tex">T</script> is defined as</p>
+
+<script type="math/tex; mode=display">\fix{T} = \{x \mid x = Tx \}.</script>
+
+<p>A useful fact is that convex combinations of non-expansive mappings are also
+non-expansive. <script type="math/tex">T</script> is a <strong>firmly non-expansive operator</strong> if it can be written
+as <script type="math/tex">T = 1/2I + 1/2N</script>, <script type="math/tex">I</script> the identity and <script type="math/tex">N</script> a non-expansive operator.</p>
+
+<p>For <strong>C</strong> a closed convex non-empty subset of the larger space <script type="math/tex">X</script>, the
+orthogonal projection operator <script type="math/tex">P_C</script> is firmly non-expansive and, if <script type="math/tex">x \in X</script>,
+then <script type="math/tex">P_C x \in C</script> and in particular <script type="math/tex">\inner{y - P_C x}{c - P_C x} \leq 0, \;
+\forall y \in C</script>.</p>
+
+<p>A sequence <script type="math/tex">(x_n)</script> converges linearly to its limit <script type="math/tex">x</script> with rate
+<script type="math/tex">\beta \in [0, 1)</script> if <script type="math/tex">\exists \alpha \geq 0</script> such that</p>
+
+<script type="math/tex; mode=display">\norm{x_n - x} \leq \alpha \beta^n, \; \forall n.</script>
+
+<p>(The above implies that <script type="math/tex">\norm{x_n - x}/\norm{x_{n-1} - x} \leq \beta</script>.)</p>
+
+<h2 id="attracting-mappings-monotone-sequences">2. Attracting mappings, monotone sequences.</h2>
+
+<p><script type="math/tex">T \colon D \rightarrow D</script>, <script type="math/tex">D</script> a closed convex non-empty set and <script type="math/tex">T</script>
+non-expansive, is <strong>attracting</strong> with respect to <script type="math/tex">F</script> if
+<script type="math/tex">\forall x \in D \setminus F, f \in F</script>,</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\norm{Tx - f} < \norm{x - f}. %]]></script>
+
+<p>The intuition is that <script type="math/tex">T</script> brings every <script type="math/tex">x \in D \setminus F</script> closer to <script type="math/tex">F</script>. 
+<script type="math/tex">T</script> is <em>strongly attracting</em> or <script type="math/tex">\kappa</script>-attracting with respect to <script type="math/tex">F</script> if
+<script type="math/tex">\exists \kappa > 0</script> such that</p>
+
+<script type="math/tex; mode=display">\kappa\norm{x - Tx}^2 \leq \norm{x-f}^2 - \norm{Tx - f}^2.</script>
+
+<p>Nice, intuitive things can be said about the composition of attracting
+operators. For example, the fixed set of a composition is the intersection
+of the fixed sets of each operator, and the composition of attracting operators
+is itself attracting. Similarly for convex combinations of attracting operators.</p>
+
+<p>A sequence <script type="math/tex">(x_n)</script> is <strong>Féjer monotone</strong> with respect to a closed convex
+non-empty set <script type="math/tex">C</script> if</p>
+
+<script type="math/tex; mode=display">\norm{x_{n+1} - c} \leq \norm{x_n - c} \; \forall c \in C, n \geq 0.</script>
+
+<h3 id="subgradient-algorithms">Subgradient Algorithms</h3>
+<p>These are a class of algorithms for when it is hard to project onto the
+target convex set. Instead, project onto a first-order approximation of the
+set.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/12/07/ap-first-results/">
+            First results for alternating projection acceleration
+            <small>07 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/visual-checklist/">
+            Checklist
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/qp-alt-proj/">
+            Literature Review: QP + Alternating Projections
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

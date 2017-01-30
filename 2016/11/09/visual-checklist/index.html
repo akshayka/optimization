@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Checklist &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Checklist</h1>
+  <span class="post-date">09 Nov 2016</span>
+  <div class="tags">
+    
+      [<a href="/tags#checklist" class="tag">checklist</a>]
+    
+      [<a href="/tags#framework" class="tag">framework</a>]
+    
+      [<a href="/tags#models" class="tag">models</a>]
+    
+      [<a href="/tags#algorithms" class="tag">algorithms</a>]
+    
+  </div>
+  <br/>
+  <h2 id="the-problems">1. The Problems.</h2>
+<p>Each problem must eventually be cast as a feasibility problem. In particular,
+the feasibility problem must be cast as finding a point in the intersection
+of an affine set and a cone. Note that the cone, however, may be the
+cross-product of multiple different cones.</p>
+
+<h2 id="the-algorithms">2. + 3. The Algorithms</h2>
+
+<p><script type="math/tex">\color{red}{[\text{Specification}]}\color{blue}{[\text{Implementation}]}</script>.</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\checkmark]}</script> Alternating projections</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\checkmark]}</script> Dykstra’s</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\circ]}</script>  ADMM</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\checkmark]}</script>
+  Halfspace Eliminating Alternating Projections (memory <script type="math/tex">k = 2</script>)</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\checkmark]}</script>
+  Halfspace Eliminating Alternating Projections (memory <script type="math/tex">k > 2</script>)</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\checkmark]}</script>
+  Halfspace Eliminating Alternating Projections, with momentum</p>
+
+<p><script type="math/tex">\color{red}{[\circ]}\color{blue}{[\circ]}</script>
+  Halfspace Eliminating Alternating Projections, with plane search / momentum</p>
+
+<p><script type="math/tex">\color{red}{[\circ]}\color{blue}{[\circ]}</script>
+  Halfspace Eliminating Alternating Projections, with plane search / momentum
+  and additional problem transformations</p>
+
+<h2 id="theoretical-analyses">4. Theoretical Analyses</h2>
+<p><script type="math/tex">{[\checkmark]}</script>
+  Halfspace Eliminating Alternating Projections (free, from Pang)</p>
+
+<p><script type="math/tex">{[\circ]}</script> Halfspace Eliminating Alternating Projections, with plane search</p>
+
+<p><script type="math/tex">{[\circ]}</script> Halfspace Eliminating Alternating Projections, with plane search
+  and additional problem transformations</p>
+
+<h2 id="the-test-cases">5. The Test Cases</h2>
+<p><script type="math/tex">[\checkmark]</script> 2D feasibility problems, for intuition’s sake.</p>
+
+<p><script type="math/tex">[\checkmark]</script> Intersection of second-order cone and affine set,
+  randomly generated</p>
+
+<p><script type="math/tex">[\circ]</script> Random cone problems of varying sizes.</p>
+
+<ul>
+  <li>NB: Can use the method described in the long SCS paper to generate these
+problems. Will need to take generated problem and form the self-dual
+homogeneous embedding in order to recover the feasibility problem, however.</li>
+</ul>
+
+<p><script type="math/tex">[\circ]</script> Open test suite for feasibility problems?</p>
+<ul>
+  <li>To the best of my knowledge, none exist!</li>
+</ul>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/12/07/ap-first-results/">
+            First results for alternating projection acceleration
+            <small>07 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/qp-alt-proj/">
+            Literature Review: QP + Alternating Projections
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/borwein-survey/">
+            Bauschke Survey on Projection Algorithms
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

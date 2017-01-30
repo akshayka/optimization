@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Tags &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item active" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="page">
+  <h1 class="page-title">Tags</h1>
+  <!-- Get the tag name for every tag on the site and set them
+to the `site_tags` variable. -->
+
+<!-- `tag_words` is a sorted array of the tag names. -->
+
+<!-- List of all tags -->
+<div class="tags">
+  
+    
+      [<a href="#Bertsekas" class="tag">Bertsekas
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#Google" class="tag">Google
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#LP" class="tag">LP
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#QP" class="tag">QP
+        <span>(2)</span>
+      </a>]
+  
+    
+      [<a href="#QPs" class="tag">QPs
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#acceleration" class="tag">acceleration
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#admm" class="tag">admm
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#affine-sets" class="tag">affine-sets
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#algorithms" class="tag">algorithms
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#alternating-projections" class="tag">alternating-projections
+        <span>(7)</span>
+      </a>]
+  
+    
+      [<a href="#basis" class="tag">basis
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#bauschke" class="tag">bauschke
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#borwein" class="tag">borwein
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#boyd" class="tag">boyd
+        <span>(2)</span>
+      </a>]
+  
+    
+      [<a href="#checklist" class="tag">checklist
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#cones" class="tag">cones
+        <span>(3)</span>
+      </a>]
+  
+    
+      [<a href="#cutting-plane" class="tag">cutting-plane
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#cvxflow" class="tag">cvxflow
+        <span>(2)</span>
+      </a>]
+  
+    
+      [<a href="#diamond" class="tag">diamond
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#distributed-optimization" class="tag">distributed-optimization
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#dual-cones" class="tag">dual-cones
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#dykstra" class="tag">dykstra
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#ee364b" class="tag">ee364b
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#epsilon" class="tag">epsilon
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#experiments" class="tag">experiments
+        <span>(2)</span>
+      </a>]
+  
+    
+      [<a href="#feasibility" class="tag">feasibility
+        <span>(2)</span>
+      </a>]
+  
+    
+      [<a href="#first-order-methods" class="tag">first-order-methods
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#foundations" class="tag">foundations
+        <span>(2)</span>
+      </a>]
+  
+    
+      [<a href="#framework" class="tag">framework
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#hallac" class="tag">hallac
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#heavy-ball" class="tag">heavy-ball
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#interior-point-methods" class="tag">interior-point-methods
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#journal" class="tag">journal
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#linear-algebra" class="tag">linear-algebra
+        <span>(2)</span>
+      </a>]
+  
+    
+      [<a href="#literature-review" class="tag">literature-review
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#localization" class="tag">localization
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#meetings" class="tag">meetings
+        <span>(2)</span>
+      </a>]
+  
+    
+      [<a href="#models" class="tag">models
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#momentum" class="tag">momentum
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#open-problems" class="tag">open-problems
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#operator-splitting" class="tag">operator-splitting
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#paper" class="tag">paper
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#polar-cones" class="tag">polar-cones
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#polyak" class="tag">polyak
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#projections" class="tag">projections
+        <span>(7)</span>
+      </a>]
+  
+    
+      [<a href="#proposal" class="tag">proposal
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#quadratic-programming" class="tag">quadratic-programming
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#randomized" class="tag">randomized
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#results" class="tag">results
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#robust" class="tag">robust
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#scalable" class="tag">scalable
+        <span>(2)</span>
+      </a>]
+  
+    
+      [<a href="#scs" class="tag">scs
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#subgradients" class="tag">subgradients
+        <span>(1)</span>
+      </a>]
+  
+    
+      [<a href="#survey" class="tag">survey
+        <span>(2)</span>
+      </a>]
+  
+    
+      [<a href="#wytock" class="tag">wytock
+        <span>(2)</span>
+      </a>]
+  
+</div>
+
+<!-- Posts by Tag -->
+<div>
+  
+    
+    <h2 id="Bertsekas">Bertsekas</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/07/optimization-methods-bertsekas/">Convex Optimization Algorithms, Berteskas [2009 Supplement]</a>
+        </span>
+        <span style="float: right;">
+          07 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="Google">Google</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/06/matt-wytock/">Matt Wytock [10/06/16]</a>
+        </span>
+        <span style="float: right;">
+          06 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="LP">LP</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/09/28/open-problems/">Open Problems re: LPs</a>
+        </span>
+        <span style="float: right;">
+          28 Sep 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="QP">QP</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/24/boyd/">Professor Boyd [10/24/2016]</a>
+        </span>
+        <span style="float: right;">
+          24 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/20/speeding-up-alt-projections/">Speeding up Subgradient Methods &amp; Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          20 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="QPs">QPs</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/qp-alt-proj/">Literature Review: QP + Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="acceleration">acceleration</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/24/boyd/">Professor Boyd [10/24/2016]</a>
+        </span>
+        <span style="float: right;">
+          24 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="admm">admm</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/30/admm/">ADMM</a>
+        </span>
+        <span style="float: right;">
+          30 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="affine-sets">affine-sets</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/20/speeding-up-alt-projections/">Speeding up Subgradient Methods &amp; Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          20 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="algorithms">algorithms</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/visual-checklist/">Checklist</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="alternating-projections">alternating-projections</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/12/07/ap-first-results/">First results for alternating projection acceleration</a>
+        </span>
+        <span style="float: right;">
+          07 Dec 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/qp-alt-proj/">Literature Review: QP + Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/28/alternating-projection-experiments/">Experiments for Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          28 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/24/boyd/">Professor Boyd [10/24/2016]</a>
+        </span>
+        <span style="float: right;">
+          24 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/20/speeding-up-alt-projections/">Speeding up Subgradient Methods &amp; Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          20 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/17/research-directions/">Research Directions, Week 4</a>
+        </span>
+        <span style="float: right;">
+          17 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/14/alternating-projections/">Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          14 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="basis">basis</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/21/change-of-basis/">Change of Basis</a>
+        </span>
+        <span style="float: right;">
+          21 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="bauschke">bauschke</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/borwein-survey/">Bauschke Survey on Projection Algorithms</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="borwein">borwein</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/borwein-survey/">Bauschke Survey on Projection Algorithms</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="boyd">boyd</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/24/boyd/">Professor Boyd [10/24/2016]</a>
+        </span>
+        <span style="float: right;">
+          24 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/09/26/meeting/">Meeting Notes [Boyd, Diamond] [9/26/16]</a>
+        </span>
+        <span style="float: right;">
+          26 Sep 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="checklist">checklist</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/visual-checklist/">Checklist</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="cones">cones</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/20/speeding-up-alt-projections/">Speeding up Subgradient Methods &amp; Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          20 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/14/cones/">Cones [Foundations]</a>
+        </span>
+        <span style="float: right;">
+          14 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/14/alternating-projections/">Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          14 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="cutting-plane">cutting-plane</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/17/research-directions/">Research Directions, Week 4</a>
+        </span>
+        <span style="float: right;">
+          17 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="cvxflow">cvxflow</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/07/cvxflow/">Paper: cvxflow [Wytock]</a>
+        </span>
+        <span style="float: right;">
+          07 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/06/matt-wytock/">Matt Wytock [10/06/16]</a>
+        </span>
+        <span style="float: right;">
+          06 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="diamond">diamond</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/09/26/meeting/">Meeting Notes [Boyd, Diamond] [9/26/16]</a>
+        </span>
+        <span style="float: right;">
+          26 Sep 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="distributed-optimization">distributed-optimization</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/30/admm/">ADMM</a>
+        </span>
+        <span style="float: right;">
+          30 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="dual-cones">dual-cones</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/14/alternating-projections/">Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          14 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="dykstra">dykstra</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/20/speeding-up-alt-projections/">Speeding up Subgradient Methods &amp; Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          20 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="ee364b">ee364b</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/12/364b-lecture-notes/">Skimming 364b lecture notes</a>
+        </span>
+        <span style="float: right;">
+          12 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="epsilon">epsilon</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/06/matt-wytock/">Matt Wytock [10/06/16]</a>
+        </span>
+        <span style="float: right;">
+          06 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="experiments">experiments</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/12/07/ap-first-results/">First results for alternating projection acceleration</a>
+        </span>
+        <span style="float: right;">
+          07 Dec 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/28/alternating-projection-experiments/">Experiments for Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          28 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="feasibility">feasibility</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/borwein-survey/">Bauschke Survey on Projection Algorithms</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/30/admm/">ADMM</a>
+        </span>
+        <span style="float: right;">
+          30 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="first-order-methods">first-order-methods</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/06/interior-vs-first-order/">Interior Point v. First Order Methods</a>
+        </span>
+        <span style="float: right;">
+          06 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="foundations">foundations</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/14/cones/">Cones [Foundations]</a>
+        </span>
+        <span style="float: right;">
+          14 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/12/projections/">Projections [Foundations]</a>
+        </span>
+        <span style="float: right;">
+          12 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="framework">framework</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/visual-checklist/">Checklist</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="hallac">hallac</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/17/david-hallac/">David Hallac [10/17/2016]</a>
+        </span>
+        <span style="float: right;">
+          17 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="heavy-ball">heavy-ball</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/28/heavy-ball/">The Heavy Ball Method</a>
+        </span>
+        <span style="float: right;">
+          28 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="interior-point-methods">interior-point-methods</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/06/interior-vs-first-order/">Interior Point v. First Order Methods</a>
+        </span>
+        <span style="float: right;">
+          06 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="journal">journal</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/17/research-directions/">Research Directions, Week 4</a>
+        </span>
+        <span style="float: right;">
+          17 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="linear-algebra">linear-algebra</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/21/change-of-basis/">Change of Basis</a>
+        </span>
+        <span style="float: right;">
+          21 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/12/projections/">Projections [Foundations]</a>
+        </span>
+        <span style="float: right;">
+          12 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="literature-review">literature-review</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/qp-alt-proj/">Literature Review: QP + Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="localization">localization</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/17/research-directions/">Research Directions, Week 4</a>
+        </span>
+        <span style="float: right;">
+          17 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="meetings">meetings</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/06/matt-wytock/">Matt Wytock [10/06/16]</a>
+        </span>
+        <span style="float: right;">
+          06 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/09/26/meeting/">Meeting Notes [Boyd, Diamond] [9/26/16]</a>
+        </span>
+        <span style="float: right;">
+          26 Sep 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="models">models</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/visual-checklist/">Checklist</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="momentum">momentum</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/28/heavy-ball/">The Heavy Ball Method</a>
+        </span>
+        <span style="float: right;">
+          28 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="open-problems">open-problems</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/09/28/open-problems/">Open Problems re: LPs</a>
+        </span>
+        <span style="float: right;">
+          28 Sep 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="operator-splitting">operator-splitting</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/21/scs/">SCS: Conic Optimization</a>
+        </span>
+        <span style="float: right;">
+          21 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="paper">paper</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/07/cvxflow/">Paper: cvxflow [Wytock]</a>
+        </span>
+        <span style="float: right;">
+          07 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="polar-cones">polar-cones</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/14/alternating-projections/">Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          14 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="polyak">polyak</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/28/heavy-ball/">The Heavy Ball Method</a>
+        </span>
+        <span style="float: right;">
+          28 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="projections">projections</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/borwein-survey/">Bauschke Survey on Projection Algorithms</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/30/admm/">ADMM</a>
+        </span>
+        <span style="float: right;">
+          30 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/24/boyd/">Professor Boyd [10/24/2016]</a>
+        </span>
+        <span style="float: right;">
+          24 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/21/scs/">SCS: Conic Optimization</a>
+        </span>
+        <span style="float: right;">
+          21 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/21/change-of-basis/">Change of Basis</a>
+        </span>
+        <span style="float: right;">
+          21 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/14/alternating-projections/">Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          14 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/12/projections/">Projections [Foundations]</a>
+        </span>
+        <span style="float: right;">
+          12 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="proposal">proposal</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/28/alternating-projection-experiments/">Experiments for Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          28 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="quadratic-programming">quadratic-programming</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/11/09/qp-alt-proj/">Literature Review: QP + Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          09 Nov 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="randomized">randomized</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/17/research-directions/">Research Directions, Week 4</a>
+        </span>
+        <span style="float: right;">
+          17 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="results">results</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/12/07/ap-first-results/">First results for alternating projection acceleration</a>
+        </span>
+        <span style="float: right;">
+          07 Dec 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="robust">robust</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/06/matt-wytock/">Matt Wytock [10/06/16]</a>
+        </span>
+        <span style="float: right;">
+          06 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="scalable">scalable</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/17/david-hallac/">David Hallac [10/17/2016]</a>
+        </span>
+        <span style="float: right;">
+          17 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/06/matt-wytock/">Matt Wytock [10/06/16]</a>
+        </span>
+        <span style="float: right;">
+          06 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="scs">scs</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/21/scs/">SCS: Conic Optimization</a>
+        </span>
+        <span style="float: right;">
+          21 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="subgradients">subgradients</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/20/speeding-up-alt-projections/">Speeding up Subgradient Methods &amp; Alternating Projections</a>
+        </span>
+        <span style="float: right;">
+          20 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="survey">survey</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/12/364b-lecture-notes/">Skimming 364b lecture notes</a>
+        </span>
+        <span style="float: right;">
+          12 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/07/optimization-methods-bertsekas/">Convex Optimization Algorithms, Berteskas [2009 Supplement]</a>
+        </span>
+        <span style="float: right;">
+          07 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+    
+    <h2 id="wytock">wytock</h2>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/07/cvxflow/">Paper: cvxflow [Wytock]</a>
+        </span>
+        <span style="float: right;">
+          07 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+      <div>
+        <span style="float: left;">
+          <a href="/2016/10/06/matt-wytock/">Matt Wytock [10/06/16]</a>
+        </span>
+        <span style="float: right;">
+          06 Oct 2016
+        </span>
+      </div>
+      <div style="clear: both;"></div>
+    
+  
+</div>
+
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Convex Optimization &middot; Research Notebook
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/12/07/ap-first-results/">
+        First results for alternating projection acceleration
+      </a>
+    </h1>
+    <span class="post-date">07 Dec 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#alternating-projections" class="tag">alternating-projections</a>]
+	
+	  [<a href="/tags#experiments" class="tag">experiments</a>]
+	
+	  [<a href="/tags#results" class="tag">results</a>]
+	
+	</div>
+	<ol>
+  <li>Plane search does not obey fejer monotonicity</li>
+  <li>Surprisingly, initial evidence implies that the heavy ball method
+only hurts. This is of course not a conclusion, but rather an anecdotal
+observation.</li>
+  <li>QP (mem == 2) + overprojection seems to work decently well. Is the QP
+projection cheap? Probably. Closed form? Maybe.</li>
+</ol>
+
+<h2 id="the-baseline-algorithms">The baseline algorithms:</h2>
+<ol>
+  <li>Alternating projections</li>
+  <li>Alternating projections with heavy-ball momentum</li>
+</ol>
+
+<h2 id="the-state-of-the-art">The state-of-the-art:</h2>
+<ol>
+  <li>Dykstra</li>
+</ol>
+
+<h2 id="what-did-i-try">What did I try?</h2>
+<p>Problem set-up:</p>
+
+<ul>
+  <li>1500-dimensional variable</li>
+  <li>Affine constraint with random matrix <script type="math/tex">A</script> \in <script type="math/tex">\mathbb{R}^{1000 \times 1500}</script>,
+1% sparsity.</li>
+  <li><script type="math/tex">% <![CDATA[
+x = \begin{bmatrix}y & z\end{bmatrix} %]]></script>,
+<script type="math/tex">y \in \mathbb{R}^{500}, z</script> constrained to be in the second-order cone.</li>
+</ul>
+
+<p>(1) A <strong>plane search</strong>:</p>
+
+<script type="math/tex; mode=display">\optmin{\theta}{\dist{\sum_{i} \theta_i a_i}{\mathcal{C}}^2}{\sum_{i} \theta_i = 1, \quad \theta_i \in [0, 1],}</script>
+
+<p><script type="math/tex">a_i</script> are a finite number of previous iterates that were on the affine set,
+<script type="math/tex">\mathcal{C}</script> the convex cone. It turns out that performing this plane search produces
+sequences that are <strong>not Fejer monotonic</strong>!</p>
+
+<p>(2) <strong>Halfpsace Outer Approximation (HOA)</strong></p>
+
+<p>I used the <script type="math/tex">k</script> most recent halfspaces generated by projecting onto the convex
+sets, and obtained the next iterate by projecting onto the intersection of these
+sets. This works “fairly well.” It works “better” than Dykstra’s if we only look
+at the number of iterations. Of course, the number of iterations isn’t a “good”
+metric, but it’s a start. Even small <script type="math/tex">k</script> (<script type="math/tex">k = 2</script>) works well.</p>
+
+<p>(3) <strong>HOA with randomly accepting new hyperplanes.</strong></p>
+
+<p>I don’t understand this well yet, but I suspect there is something interesting
+here.</p>
+
+<p>(4) <strong>HOA with momentum</strong></p>
+
+<p>Anecdotally, momentum “helps” with respect to the number of iterations.
+Over-projecting seems to be more useful than interpolating between the previous
+velocity and the current one. Again, very anecdotal evidence.</p>
+
+<h2 id="future-work-and-experiments">Future work and experiments</h2>
+<p>(0) Write-up what I’ve done and learned this quarter and send it to Prof. Boyd.</p>
+
+<p>(1) Anneal the momentum (say by a factor of <script type="math/tex">1/\sqrt{n}</script>,
+    <script type="math/tex">n</script> the # of iterations)?</p>
+
+<p>(2) Flip a p-biased coin to decide whether or not to oveproject</p>
+
+<p>(3) Flip a p-biased coin and overproject by a lot</p>
+
+<p>(4) Take advantage of short-and-fat matrix structure, if it arises</p>
+
+<p>(5) Project onto random subsets of equality constraints</p>
+
+<p>(6) Test on the homogeneous self-dual embedding of a cone program (SCS).</p>
+
+<h2 id="questions-for-professor-boyd">Questions for Professor Boyd</h2>
+<p>(1) Does a closed-form projector onto the intersection of two halfspaces
+    exist, and/or can it be computed cheaply by some means?</p>
+
+<p>(2) Why is the optimal value returned by CVXPY inaccurate?
+   (roughly 10e-2 precision.)</p>
+
+<p>(3) Lots of stuff I want to try empirically. If anything stands out,
+    will go forward with theoretical analysis. HOA + momentum seems the
+    most promising right now. Does that sound good?</p>
+
+<p>(4) Logistics for continuing the work next quarter? Is an independent study
+    still possible? I think I have sufficient momentum now to carry me forward.
+    Will you be reachable by email? (If not, that’s totally understandable!)</p>
+
+<p>(5) I’m still very much interested in TA-ing convex in the spring, if the offer
+    still stands.</p>
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/11/09/visual-checklist/">
+        Checklist
+      </a>
+    </h1>
+    <span class="post-date">09 Nov 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#checklist" class="tag">checklist</a>]
+	
+	  [<a href="/tags#framework" class="tag">framework</a>]
+	
+	  [<a href="/tags#models" class="tag">models</a>]
+	
+	  [<a href="/tags#algorithms" class="tag">algorithms</a>]
+	
+	</div>
+	<h2 id="the-problems">1. The Problems.</h2>
+<p>Each problem must eventually be cast as a feasibility problem. In particular,
+the feasibility problem must be cast as finding a point in the intersection
+of an affine set and a cone. Note that the cone, however, may be the
+cross-product of multiple different cones.</p>
+
+<h2 id="the-algorithms">2. + 3. The Algorithms</h2>
+
+<p><script type="math/tex">\color{red}{[\text{Specification}]}\color{blue}{[\text{Implementation}]}</script>.</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\checkmark]}</script> Alternating projections</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\checkmark]}</script> Dykstra’s</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\circ]}</script>  ADMM</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\checkmark]}</script>
+  Halfspace Eliminating Alternating Projections (memory <script type="math/tex">k = 2</script>)</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\checkmark]}</script>
+  Halfspace Eliminating Alternating Projections (memory <script type="math/tex">k > 2</script>)</p>
+
+<p><script type="math/tex">\color{red}{[\checkmark]}\color{blue}{[\checkmark]}</script>
+  Halfspace Eliminating Alternating Projections, with momentum</p>
+
+<p><script type="math/tex">\color{red}{[\circ]}\color{blue}{[\circ]}</script>
+  Halfspace Eliminating Alternating Projections, with plane search / momentum</p>
+
+<p><script type="math/tex">\color{red}{[\circ]}\color{blue}{[\circ]}</script>
+  Halfspace Eliminating Alternating Projections, with plane search / momentum
+  and additional problem transformations</p>
+
+<h2 id="theoretical-analyses">4. Theoretical Analyses</h2>
+<p><script type="math/tex">{[\checkmark]}</script>
+  Halfspace Eliminating Alternating Projections (free, from Pang)</p>
+
+<p><script type="math/tex">{[\circ]}</script> Halfspace Eliminating Alternating Projections, with plane search</p>
+
+<p><script type="math/tex">{[\circ]}</script> Halfspace Eliminating Alternating Projections, with plane search
+  and additional problem transformations</p>
+
+<h2 id="the-test-cases">5. The Test Cases</h2>
+<p><script type="math/tex">[\checkmark]</script> 2D feasibility problems, for intuition’s sake.</p>
+
+<p><script type="math/tex">[\checkmark]</script> Intersection of second-order cone and affine set,
+  randomly generated</p>
+
+<p><script type="math/tex">[\circ]</script> Random cone problems of varying sizes.</p>
+
+<ul>
+  <li>NB: Can use the method described in the long SCS paper to generate these
+problems. Will need to take generated problem and form the self-dual
+homogeneous embedding in order to recover the feasibility problem, however.</li>
+</ul>
+
+<p><script type="math/tex">[\circ]</script> Open test suite for feasibility problems?</p>
+<ul>
+  <li>To the best of my knowledge, none exist!</li>
+</ul>
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/11/09/qp-alt-proj/">
+        Literature Review: QP + Alternating Projections
+      </a>
+    </h1>
+    <span class="post-date">09 Nov 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#quadratic-programming" class="tag">quadratic-programming</a>]
+	
+	  [<a href="/tags#QPs" class="tag">QPs</a>]
+	
+	  [<a href="/tags#alternating-projections" class="tag">alternating-projections</a>]
+	
+	  [<a href="/tags#literature-review" class="tag">literature-review</a>]
+	
+	</div>
+	<p>Fukushima (A finitely convergent algorithm for convex inequalities)
+– a subgradient method</p>
+
+<p>Bauschke + Borwein also propose a subgradient method (subgradient to get
+outer approximation of set, then project onto it) – feels very similar to what’s
+happening here</p>
+
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/11/09/borwein-survey/">
+        Bauschke Survey on Projection Algorithms
+      </a>
+    </h1>
+    <span class="post-date">09 Nov 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#bauschke" class="tag">bauschke</a>]
+	
+	  [<a href="/tags#borwein" class="tag">borwein</a>]
+	
+	  [<a href="/tags#feasibility" class="tag">feasibility</a>]
+	
+	  [<a href="/tags#projections" class="tag">projections</a>]
+	
+	</div>
+	<p><a href="/papers/Projection Methods and Monotone Operators.pdf">Source: Bauschke’s Projection Methods and Monotone Operators</a></p>
+
+<h3 id="preliminaries">Preliminaries</h3>
+<p>A mapping <script type="math/tex">T</script> is a <strong>non-expansive operator</strong> if it is always true that</p>
+
+<script type="math/tex; mode=display">\norm{Tx - Ty} \leq \norm{x - y}.</script>
+
+<p>It is <em>strictly</em> non-expansive if the above inequality is strict, and it
+is an <strong>isometry</strong> if the relation always holds with equality. The set
+of <strong>fixed points</strong> of a non-expansive mapping <script type="math/tex">T</script> is defined as</p>
+
+<script type="math/tex; mode=display">\fix{T} = \{x \mid x = Tx \}.</script>
+
+<p>A useful fact is that convex combinations of non-expansive mappings are also
+non-expansive. <script type="math/tex">T</script> is a <strong>firmly non-expansive operator</strong> if it can be written
+as <script type="math/tex">T = 1/2I + 1/2N</script>, <script type="math/tex">I</script> the identity and <script type="math/tex">N</script> a non-expansive operator.</p>
+
+<p>For <strong>C</strong> a closed convex non-empty subset of the larger space <script type="math/tex">X</script>, the
+orthogonal projection operator <script type="math/tex">P_C</script> is firmly non-expansive and, if <script type="math/tex">x \in X</script>,
+then <script type="math/tex">P_C x \in C</script> and in particular <script type="math/tex">\inner{y - P_C x}{c - P_C x} \leq 0, \;
+\forall y \in C</script>.</p>
+
+<p>A sequence <script type="math/tex">(x_n)</script> converges linearly to its limit <script type="math/tex">x</script> with rate
+<script type="math/tex">\beta \in [0, 1)</script> if <script type="math/tex">\exists \alpha \geq 0</script> such that</p>
+
+<script type="math/tex; mode=display">\norm{x_n - x} \leq \alpha \beta^n, \; \forall n.</script>
+
+<p>(The above implies that <script type="math/tex">\norm{x_n - x}/\norm{x_{n-1} - x} \leq \beta</script>.)</p>
+
+<h2 id="attracting-mappings-monotone-sequences">2. Attracting mappings, monotone sequences.</h2>
+
+<p><script type="math/tex">T \colon D \rightarrow D</script>, <script type="math/tex">D</script> a closed convex non-empty set and <script type="math/tex">T</script>
+non-expansive, is <strong>attracting</strong> with respect to <script type="math/tex">F</script> if
+<script type="math/tex">\forall x \in D \setminus F, f \in F</script>,</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\norm{Tx - f} < \norm{x - f}. %]]></script>
+
+<p>The intuition is that <script type="math/tex">T</script> brings every <script type="math/tex">x \in D \setminus F</script> closer to <script type="math/tex">F</script>. 
+<script type="math/tex">T</script> is <em>strongly attracting</em> or <script type="math/tex">\kappa</script>-attracting with respect to <script type="math/tex">F</script> if
+<script type="math/tex">\exists \kappa > 0</script> such that</p>
+
+<script type="math/tex; mode=display">\kappa\norm{x - Tx}^2 \leq \norm{x-f}^2 - \norm{Tx - f}^2.</script>
+
+<p>Nice, intuitive things can be said about the composition of attracting
+operators. For example, the fixed set of a composition is the intersection
+of the fixed sets of each operator, and the composition of attracting operators
+is itself attracting. Similarly for convex combinations of attracting operators.</p>
+
+<p>A sequence <script type="math/tex">(x_n)</script> is <strong>Féjer monotone</strong> with respect to a closed convex
+non-empty set <script type="math/tex">C</script> if</p>
+
+<script type="math/tex; mode=display">\norm{x_{n+1} - c} \leq \norm{x_n - c} \; \forall c \in C, n \geq 0.</script>
+
+<h3 id="subgradient-algorithms">Subgradient Algorithms</h3>
+<p>These are a class of algorithms for when it is hard to project onto the
+target convex set. Instead, project onto a first-order approximation of the
+set.</p>
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/30/admm/">
+        ADMM
+      </a>
+    </h1>
+    <span class="post-date">30 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#admm" class="tag">admm</a>]
+	
+	  [<a href="/tags#distributed-optimization" class="tag">distributed-optimization</a>]
+	
+	  [<a href="/tags#feasibility" class="tag">feasibility</a>]
+	
+	  [<a href="/tags#projections" class="tag">projections</a>]
+	
+	</div>
+	<h3 id="introduction">Introduction</h3>
+<ul>
+  <li>Common characteristics of big data:
+    <ul>
+      <li>large (billions of examples)</li>
+      <li>high dimensional</li>
+      <li>stored and/or collected in a distributed fashion</li>
+    </ul>
+  </li>
+  <li><script type="math/tex">\exists</script> need for rich, scalable algorithms</li>
+  <li>a <em>decomposition-coordination</em> procedure: solutions to local subproblems are
+coordinated to find solution to global problem</li>
+</ul>
+
+
+	
+		<a href="/2016/10/30/admm/">Read more</a>
+	
+  </div>
+  
+</div>
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/page2">Older</a>
+  
+  
+    <span class="pagination-item newer">Newer</span>
+  
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

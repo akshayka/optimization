@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Speeding up Subgradient Methods & Alternating Projections &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Speeding up Subgradient Methods & Alternating Projections</h1>
+  <span class="post-date">20 Oct 2016</span>
+  <div class="tags">
+    
+      [<a href="/tags#subgradients" class="tag">subgradients</a>]
+    
+      [<a href="/tags#alternating-projections" class="tag">alternating-projections</a>]
+    
+      [<a href="/tags#dykstra" class="tag">dykstra</a>]
+    
+      [<a href="/tags#QP" class="tag">QP</a>]
+    
+      [<a href="/tags#cones" class="tag">cones</a>]
+    
+      [<a href="/tags#affine-sets" class="tag">affine-sets</a>]
+    
+  </div>
+  <br/>
+  <p>Plan of attack (not necessarily sequential):</p>
+<ul>
+  <li>Get up to speed with Boyd’s notes on subgradient methods + alternating
+projections</li>
+  <li>Skim Bertseka’s sections on subgradient methods</li>
+  <li>Skim survey of speedup techniques for alternating projections
+(under/overprojection, dyskstra)</li>
+  <li>Skim ideas for QP-acceleration (Pang’s work)</li>
+  <li>Contribute — propose acceleration techniques (non-rigorously at first!)</li>
+  <li>QP “line search”</li>
+  <li>random perturbations &amp; drift directions</li>
+  <li>interpolating between new data and previous estimate</li>
+  <li>sketch system of inequalities implied by collection of supporting
+hyperplanes</li>
+  <li>What additional structure do we gain / what structure do we lose by changing
+one of the sets to a convex cone? (different types of cones – second order,
+exponential, …)</li>
+</ul>
+
+<!--more-->
+
+<h2 id="dykstras-method-d83d83">Dykstra’s Method <a href="/papers/Dykstra - An Algorithm for Restricted Least Squares Regression.pdf">[D83]</a></h2>
+<p>Goal: Find a least squares projection onto a convex set.</p>
+
+<h3 id="preliminaries">Preliminaries</h3>
+<p>Let <script type="math/tex">K</script> be a cone, and consider the problem</p>
+
+<script type="math/tex; mode=display">\begin{align}\min_{x \in K} \lVert g - x \rVert.\end{align} \label{min-cone}</script>
+
+<p><script type="math/tex">g^*</script> is optimal if and only if <script type="math/tex">\inner{g - g^*}{g^*}=0</script> (orthogonality)
+and <script type="math/tex">\inner{g - g^*}{z} \leq 0, \; \forall z \in K</script> (supporting hyperplane).
+Also, <script type="math/tex">g - g^*</script> is the projection of <script type="math/tex">g</script> onto <script type="math/tex">K^\circ</script> (see my notes on
+alternating projections).</p>
+
+<h3 id="the-algorithm">The Algorithm</h3>
+
+<p>… <a href="/papers/Dykstra - An Algorithm for Restricted Least Squares Regression.pdf">[D83]</a> is old, and the result actually holds for projecting onto
+the intersection of general closed convex sets (not necessarily cones). A
+natural way to think about the process is that the projections are
+“pulled back” before re-projecting. So say we are projecting onto <script type="math/tex">C \cap D</script>,
+and say that <script type="math/tex">x_0 \in C</script> (that is, we start off in <script type="math/tex">C</script>). Then
+<script type="math/tex">x_0 \xrightarrow{P_D} y_0</script>, <script type="math/tex">y_0 \xrightarrow{P_C} x_1</script>. But now,
+instead of projecting <script type="math/tex">x_1</script> back onto <script type="math/tex">C</script> to form the next <script type="math/tex">y</script> iterate,
+we instead take <script type="math/tex">x_1</script> and “pull it back” by in the opposite direction <script type="math/tex">x_0</script>
+was projected. In particular, we take <script type="math/tex">\tilde{x_1} := x_1 + p_0</script>, where
+<script type="math/tex">p_1 := \tilde{x_0} - y_0</script>, <script type="math/tex">\tilde{x_0} = x_0</script>.
+We then form <script type="math/tex">y_1</script> as <script type="math/tex">P_D(\tilde{x_1})</script>. Similarly,
+to get <script type="math/tex">x_2</script>, we form <script type="math/tex">\tilde{y_1} := y_1 + q_1</script>,
+where <script type="math/tex">q_1 := \tilde{y_0} - x_1</script>,
+<script type="math/tex">\tilde{y_0} = y_0</script>. Then we take <script type="math/tex">x_2 = P_C(\tilde{y_1})</script>, and we continue
+this process until convergence.</p>
+
+<p><img src="/assets/dykstra_algorithm.png" style="margin:auto" /></p>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/12/07/ap-first-results/">
+            First results for alternating projection acceleration
+            <small>07 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/visual-checklist/">
+            Checklist
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/qp-alt-proj/">
+            Literature Review: QP + Alternating Projections
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

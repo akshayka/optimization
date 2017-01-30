@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Convex Optimization Algorithms, Berteskas [2009 Supplement] &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Convex Optimization Algorithms, Berteskas [2009 Supplement]</h1>
+  <span class="post-date">07 Oct 2016</span>
+  <div class="tags">
+    
+      [<a href="/tags#Bertsekas" class="tag">Bertsekas</a>]
+    
+      [<a href="/tags#survey" class="tag">survey</a>]
+    
+  </div>
+  <br/>
+  <p><a href="/texts/Convex-Optimization-Algorithms-Supplement.pdf">Convex Optimization Algorithms</a></p>
+
+<p>Most algorithms for minimizing convex <script type="math/tex">f</script> over a convex set <script type="math/tex">X</script> make use
+of at least one of the following techniques:</p>
+<ol>
+  <li><strong>Iterative descent</strong>. The sequence <script type="math/tex">\{x_k\} \subset X</script> is such that
+<script type="math/tex">\{\phi(x_k)\}</script> is a decreasing sequence.</li>
+  <li><strong>Approximation</strong>, where <script type="math/tex">\{x_k\}</script> is obtained by solving at each step
+<script type="math/tex">k</script> a tractable approximation of the original optimization problem. The
+approximation should improve at each step <script type="math/tex">k</script>.</li>
+</ol>
+
+<p>This post covers …</p>
+<ul>
+  <li>gradient descent methods</li>
+  <li>subgradient methods</li>
+  <li>polyhedral approximation methods</li>
+  <li>proximal and bundle methods</li>
+  <li>interior-point methods</li>
+  <li>primal-dual methods</li>
+  <li>approximate subgradient methods
+<!--more--></li>
+</ul>
+
+<h3 id="gradient-descent-methods">Gradient Descent Methods</h3>
+<ul>
+  <li>of limited use in general optimization theory because they require
+differentiability</li>
+</ul>
+
+<h3 id="subgradient-methods">Subgradient Methods</h3>
+<ul>
+  <li>bear a striking resemblance to gradient methods</li>
+  <li>in their simplest form (minimizing a convex <script type="math/tex">f</script> over convex set <script type="math/tex">X</script>) …</li>
+</ul>
+
+<script type="math/tex; mode=display">x_{k+1} := P_X(x_k - \alpha_kg_k)</script>
+
+<p>where <script type="math/tex">P_X</script> is the projection onto <script type="math/tex">X</script>, <script type="math/tex">\alpha_k</script> is the learning rate
+at <script type="math/tex">k</script> and <script type="math/tex">g_k</script> is a subgradient.</p>
+
+<ul>
+  <li>A strange property: <script type="math/tex">f(x_{x+1})</script> is possibly <script type="math/tex">> f(x_k)</script>.</li>
+  <li>However, we are guaranteed that the distance from the optimal set is reduced.
+    <ul>
+      <li>Comes from the fact that</li>
+    </ul>
+  </li>
+</ul>
+
+<script type="math/tex; mode=display">||P_X(x) - P_X(y)|| \leq ||x-y|| \forall x, y</script>
+
+<h3 id="polyhedral-approximation-methods">Polyhedral Approximation Methods</h3>
+<ol>
+  <li>Compute subgradient at each iteration</li>
+  <li>Use previously calculated subgradients to construct piecewise linear
+approximations of the cost function and/or constraint set.</li>
+</ol>
+
+<p><em>Outer Linearization: Cutting Plane Methods</em></p>
+<ul>
+  <li>
+    <p>Key idea: A closed convex set is the intersection of its supporting
+halfspaces</p>
+
+    <script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\text{minimize } & F_k(x) \\
+\text{subject to } & x \in X \\
+&\downarrow \\
+&x_{k+1}
+\end{align*} %]]></script>
+
+    <ul>
+      <li><script type="math/tex">F_k</script> is a polyhedral approximation of <script type="math/tex">f</script>:</li>
+    </ul>
+  </li>
+</ul>
+
+<script type="math/tex; mode=display">F_k(x) = \operatorname{max}_i\left\{f(x_i) + (x - x_i)^Tg_i\right\}</script>
+
+<p>where <script type="math/tex">{x_i}</script> is the sequence of points generated thus far and <script type="math/tex">g_i</script> is the
+subgradient computed in step <script type="math/tex">i</script>. This is very neat: if you draw a simple
+diagram, you’ll see that <script type="math/tex">F_k</script> sketches the boundary of <script type="math/tex">f</script>. (Try this
+sketch for a quadratic <script type="math/tex">f</script>, for example.)</p>
+
+<ul>
+  <li>Theorem: <script type="math/tex">\lim x_k</script> is an optimal solution.</li>
+</ul>
+
+<p>Limitations:</p>
+<ol>
+  <li><em>instability</em> – the algorithm can take large steps <em>away</em> from the optimum,
+and in particular <script type="math/tex">x_k</script> might not be a good starting point for <script type="math/tex">F_k(x)</script>.</li>
+  <li><em>computational tractability</em> – number of subgradients used to construct
+polyhedral approximation increases without bound as <script type="math/tex">k \rightarrow \infty</script>.
+The successive optimization problems become more and more expensive to solve.</li>
+  <li><em>Convergence can be slow</em>. proximal methods are aimed at mitigating
+instability*</li>
+</ol>
+
+<p><em>Central Cutting Plane Methods</em></p>
+<ul>
+  <li><script type="math/tex">F_k(x)</script> defined as before, but …</li>
+  <li><script type="math/tex">x_{k+1}</script> is the first component of a <strong>central pair</strong>
+<script type="math/tex">(x_{k+1}, w_{k+1})</script>.
+    <ul>
+      <li><script type="math/tex">x_{k+1} \in S_k</script>:</li>
+    </ul>
+  </li>
+</ul>
+
+<script type="math/tex; mode=display">\begin{align*}
+S_k = \{(x, w) \mid x \in X, F_k(x) \leq w \leq \tilde{f}_k\}
+\end{align*}</script>
+
+<p>where <script type="math/tex">\tilde{f}_k = \min_{i \leq k} f(x_i)</script> is the best upper bound of
+the optimal value found so far.</p>
+
+<p><img src="/assets/central-cutting-plane.png" style="margin:auto" /></p>
+
+<ul>
+  <li>the <em>analytic center of S_k</em> is one choice for the central point.</li>
+  <li>central cutting plane methods are closely related to
+interior point methods <span class="todo">(?)</span></li>
+</ul>
+
+<p><span class="meta-text">randomized algorithms seem like they could help make
+cutting plane methods more computationally tractable. It seems like I’m not
+the first to make this observation. Bertsekas published a seminal paper about
+using <a href="/papers/Solving-Convex-Programs-by-Random-Walks.pdf">random walks for convex optimization</a>. A more
+recent paper looked at a similar problem (<a href="/papers/A-Randomized-Cutting-Plane-Method.pdf">A Randomized Cutting Plane Method</a>).
+</span></p>
+
+<p><em>Inner Linearization: Simplical Decomposition</em></p>
+<ul>
+  <li>approximate <script type="math/tex">X</script> with the convex hull of an expanding finite <script type="math/tex">X_k \subset X</script>
+that contains the extreme points of <script type="math/tex">X</script> plus an arbitrary <script type="math/tex">x_o \in X</script>.
+Each x_k gives a cost improvement.</li>
+  <li>for differentiable convex <script type="math/tex">f</script> and bounded polyhedral <script type="math/tex">X</script>.</li>
+  <li>useful when:
+    <ol>
+      <li><script type="math/tex">f</script> non-linear (takes advantage of fact minimizing linear over <script type="math/tex">X</script>
+is easy.</li>
+      <li><script type="math/tex">X</script> has a large number of extreme points.</li>
+    </ol>
+  </li>
+</ul>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\text{minimize } & \nabla f(x_k)^T(x - x_k)\\
+\text{subject to } & x \in X \\
+&\downarrow \\
+&\tilde{x}_{k+1}, \\
+&X_{k+1} = \{\tilde{x}_{k+1}\} \cup X_k \\
+&\downarrow \\
+\text{minimize } & f(x)\\
+\text{subject to } & x \in \operatorname{conv}(X_{k+1}) \\
+&\downarrow \\
+&x_{k+1} \\
+\end{align*} %]]></script>
+
+<p><em>Duality of Outer and Inner Linearization</em>
+<script type="math/tex">f</script> closed, proper, and convex <script type="math/tex">\implies</script> outer linearization of <script type="math/tex">f</script> is
+equivalent to an inner linearization of the conjugate <script type="math/tex">f*</script> and vice versa.</p>
+
+<p><em>Generalized Polyhedral Approximation</em></p>
+
+<p><span class="todo">todo</span></p>
+
+<p><em>Proximal Center</em></p>
+<ul>
+  <li>Recall a key problem with the cutting plane method: <em>instability</em>.</li>
+  <li>Proposed solution: penalize deviations from a reference point <script type="math/tex">y_k</script></li>
+</ul>
+
+<script type="math/tex; mode=display">x_{k+1} \in \text{arg min}_{x \in X} \{ F_k(x) + p_k(x) \},</script>
+
+<p>where <script type="math/tex">F_k</script> is defined as in the cutting plane method and</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+p_k(x) = \frac{1}{2c_k}||x - y_k||^2, && c > 0.
+\end{align*} %]]></script>
+
+<ul>
+  <li>adding a proximal term trades off efficiency (must solve a QP) for stability</li>
+</ul>
+
+<h3 id="proximal-and-bundle-methods">Proximal and Bundle Methods</h3>
+<p><em>Proximal Point Algorithm</em></p>
+
+<script type="math/tex; mode=display">x_{k+1} \in \text{arg min}_{x \in \mathbb{R}^n} \left\{
+f(x) + \frac{1}{2c_k}||x - x_k||^2 \right\}</script>
+
+<p><span class="todo">Revisit this – geometric intuition is not obvious.
+What advantage do we obtain from adding an additional term to our objective
+function?</span></p>
+
+<p>Let <script type="math/tex">\phi_c(z) = \inf_{x \in \mathbb{R}^n}\left\{
+f(x) + \frac{1}{2c_k}||x - x_k||^2 \right\}</script>. Then</p>
+
+<script type="math/tex; mode=display">\begin{align*}
+\inf_{x} f(x) \leq \phi_c(z) \leq f(z)
+\end{align*}</script>
+
+<p><em>Proximal Cutting Plane Method</em></p>
+<ul>
+  <li>Just like the cutting plane method, except minimize <script type="math/tex">F_k(x) +</script> proximal term.</li>
+  <li>Advantage: Increased stability</li>
+  <li>Limitations:
+    <ul>
+      <li>trade-off in choice of parameter <script type="math/tex">c_k</script>. Large <script type="math/tex">c_k \implies</script> faster
+convergence, less stability. Small <script type="math/tex">c_k \implies</script> slower convergence, more
+stability.</li>
+      <li>number of subgradients used in polyhedral approximation can grow to be
+large (this problem is inherited from the cutting plane method).</li>
+    </ul>
+  </li>
+</ul>
+
+<p><em>Bundle Methods</em></p>
+<ul>
+  <li>the proximal center is not constrained to be <script type="math/tex">x_k</script>, as it is in the
+proximal cutting plane method; rather, it can be any <script type="math/tex">x_i</script>, <script type="math/tex">i \leq k</script></li>
+  <li><span class="todo">todo: revisit.</span></li>
+  <li><span class="meta-text">there’s significant policy about how and when to
+discard subgradients. could be interesting to look into.</span></li>
+</ul>
+
+<p><em>Dual Proximal Point Algorithms</em></p>
+
+<p><span class="todo">todo</span></p>
+
+<h3 id="interior-point-methods">Interior Point Methods</h3>
+
+<p>Optimization problems with inequality constraints:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\text{minimize } & F_k(x) \\
+\text{subject to } & x \in X, && g_j(x) \leq 0, && j = 1, \ldots, r, \\
+\end{align*} %]]></script>
+
+<p>where the <script type="math/tex">g_j</script> are convex, as is <script type="math/tex">f</script>, <script type="math/tex">X</script> a closed convex set.
+Let</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+S = \{x \in X \mid g_j(x) < 0\} %]]></script>
+
+<p>be the <strong>interior</strong> of the set defined
+by the inequality constraints. <script type="math/tex">S</script> is non-empty by assumption.</p>
+
+<ul>
+  <li>Key Idea: a <strong>barrier function</strong> <script type="math/tex">B(X)</script> to the cost that is defined on
+ <script type="math/tex">\operatorname{int} S</script>.</li>
+  <li>Key Property: <script type="math/tex">\lim_{g_j(x) \rightarrow 0-} B(X) = \infty</script>
+    <ul>
+      <li>It is in this sense that <script type="math/tex">B(X)</script> is a barrier.</li>
+    </ul>
+  </li>
+  <li>Examples:
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">B(X) = -\sum_j \log(-g_j(x))</script>
+      </li>
+      <li>
+        <script type="math/tex; mode=display">B(X) = -\sum_j \frac{1}{g_j(x)}</script>
+      </li>
+    </ul>
+  </li>
+  <li>The barrier method adds a parameter sequence <script type="math/tex">\{\epsilon_k\}</script> s.t.
+<script type="math/tex">% <![CDATA[
+0 < \epsilon_{k+1} < \epsilon_k %]]></script>, <script type="math/tex">\lim \epsilon_k = 0</script>.</li>
+  <li>At each iteration, must find …</li>
+</ul>
+
+<script type="math/tex; mode=display">\begin{align*}
+x_k \in \text{arg }\min_{x \in S} \{f(x) + \epsilon_kB(x)\}
+\end{align*}</script>
+
+<ul>
+  <li>Can use Newton’s Method to solve for each iterate <script type="math/tex">x_k \in S</script>.</li>
+</ul>
+
+<p><strong>[BV04] Interlude</strong></p>
+
+<p><em>Newton’s Method with Equality Constraints</em></p>
+
+<p>Goal: Solve</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\text{minimize } & f(x)
+\text{subject to } & Ax = b,\\
+\end{align*} %]]></script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\text{minimize } & \frac{1}{2}x^TPx + q^Tx + r\\
+\text{subject to } & Ax = b,\\
+\end{align*} %]]></script>
+
+<p>has optimality conditions</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+Ax^* &= b && Px^* + q + A^T\nu^* = 0, \\
+\end{align*} %]]></script>
+
+<p>or, more succintly,</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\begin{bmatrix}
+  P & A^T \\
+  A & 0
+\end{bmatrix}
+\begin{bmatrix}
+x^* \\
+\nu^*
+\end{bmatrix} &=
+\begin{bmatrix}
+-q \\
+b
+\end{bmatrix}
+\end{align*} %]]></script>
+
+<p>In Newton’s Method, we replace the objective function with its second-order
+Taylor approximation near x:</p>
+
+<script type="math/tex; mode=display">f(x + v) \approx f(x) + \nabla f(x)^Tv + \frac{1}{2}v^T\nabla^2f(x)v</script>
+
+<p>This gives the KKT conditions</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\begin{bmatrix}
+  \nabla^2f(x) & A^T \\
+   A & 0
+\end{bmatrix}
+\begin{bmatrix}
+\Delta x_{nt} \\
+w
+\end{bmatrix} &=
+\begin{bmatrix}
+-\nabla f(x) \\
+0
+\end{bmatrix}
+\end{align*}, %]]></script>
+
+<p>where <script type="math/tex">\Delta x_{nt}</script> the optimal solution to the approximated objective,  <script type="math/tex">w</script>
+the optimal dual variable.</p>
+
+<p><span class="meta-text">Why do we need to use the dual variable <script type="math/tex">w</script> in the first
+place? Because we are not necessarily looking for the global minimum of
+our objective function, but we <em>are</em> looking for the global maximum of the
+lagrangian (and, therefore, we can make use of the fact that we need
+the gradient of the lagrangian to be zero).</span></p>
+
+<p><em>Infeasible start Newton Method</em></p>
+
+<p>If we start with an infeasible <script type="math/tex">x</script>, then our <script type="math/tex">KKT</script> conditions look almost
+exactly the same as before, except now it is possible that <script type="math/tex">Ax \neq b:</script></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\begin{bmatrix}
+  \nabla^2f(x) & A^T \\
+   A & 0
+\end{bmatrix}
+\begin{bmatrix}
+\Delta x_{nt} \\
+w
+\end{bmatrix} &=
+-\begin{bmatrix}
+\nabla f(x) \\
+Ax - b
+\end{bmatrix}
+\end{align*} %]]></script>
+
+<p><script type="math/tex">Ax - b</script> is the <em>residual</em> vector for the linear inequality constraints. We
+can interpret the above equations as a <em>primal-dual</em> method for the equality
+constrained problem. We define the <em>dual residual</em> <script type="math/tex">r_{d}</script> and
+<em>primal residual</em> <script type="math/tex">r_{p}</script> as</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+r_d(x,\nu) = \nabla f(x) + A^T\nu, && r_p(x, \nu) = Ax - b \\
+\end{align*} %]]></script>
+
+<p>We want to <script type="math/tex">r_d</script> and <script type="math/tex">r_p</script> to equal zero (remember, they are residuals).
+In particular, we want to take a small step <script type="math/tex">\Delta y_{pd} = (\Delta x_{pd},
+\Delta \nu_{pd})</script> so that <script type="math/tex">r(y +z) = 0</script>, where <script type="math/tex">y</script> is our current estimate
+of <script type="math/tex">(x^*, \nu^*)</script>.  Since</p>
+
+<script type="math/tex; mode=display">r(y+z) \approx r(y) + Dr(y)z,</script>
+
+<p>where <script type="math/tex">D</script> is the differential operator, we want to pick <script type="math/tex">\Delta y_{pd}</script>
+such that</p>
+
+<script type="math/tex; mode=display">Dr(y)\Delta y_{pd} = -r(y).</script>
+
+<p>Our optimality conditions become</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\begin{bmatrix}
+  \nabla^2f(x) & A^T \\
+   A & 0
+\end{bmatrix}
+\begin{bmatrix}
+\Delta x_{pd} \\
+\Delta \nu_{pd} \\
+\end{bmatrix} &=
+-\begin{bmatrix}
+r_d \\
+p_d
+\end{bmatrix}
+\end{align*}. %]]></script>
+
+<p>If we write <script type="math/tex">\nu^+ = \nu + \Delta \nu_{pd}</script>, then the optimality conditions
+look exactly like those for the feasible start Newton’s method, with</p>
+
+<script type="math/tex; mode=display">\Delta x_{nt} = \Delta x_{pd}, w = \nu^+ = \nu + \Delta \nu_{pd}.</script>
+
+<p><script type="math/tex">\therefore</script>, the infeasible Newton step is the same as the primal part of the
+primal-dual step, and the associated dual vector <script type="math/tex">w</script> is the primal-dual variable
+<script type="math/tex">\nu^+</script>.</p>
+
+<p>Disadvantage of infeasible start Netwon method: hard to know whether problem
+is wholly infeasible (useful when you know it’s feasible but unsure how to find
+a feasible point). Also slow to converge to feasibility.</p>
+
+<p><em>Inequality constrained minimization</em></p>
+
+<p>Problem of interest:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\text{minimize } & f_0(x)\\
+\text{subject to } & f_i(x) \leq 0, \forall i \\
+& Ax = b,
+\end{align*} %]]></script>
+
+<p>Recall the KKT conditions:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+Ax^* &= b \\ 
+f_i(x^*) &\leq 0, \forall i \\
+\lambda^* &\geq 0 \\
+\nabla f_0(x^*) + \sum_i \lambda_i^* f_i(x^*) + A^T\nu^* &= 0 \\
+\lambda_i^* f_i(x^*) &= 0, \forall i \\
+\end{align*} %]]></script>
+
+<p>Interior-point methods solve the KKT conditions by applying Newton’s method to
+a sequence of equality constrained problems / a sequence of modified versions of
+the KKT conditions.</p>
+
+<p>Hierarchy of methods:</p>
+<ol>
+  <li>Analytical solutions for linear equality constrained quadratic problems.</li>
+  <li>Newton’s method for linear equality constrained problems with twice
+differentiable objective functions –&gt; a sequence of (1).</li>
+  <li>Interior-point methods for linear equality &amp; inequality constrained problems
+by reducing to a sequence of linear equality constrained problems.</li>
+</ol>
+
+<p>The idea of a <strong>barrier</strong> is intuitive ~</p>
+
+<p><img src="/assets/log-barrier.png" style="margin:auto" /></p>
+
+<p>A point <script type="math/tex">x^*(t)</script> on the <em>central point</em> is at most <script type="math/tex">m/t</script> suboptimal, <script type="math/tex">m</script> the
+number of inequality constraints. The barrier method conveniently gives us dual feasible points along the way (see [BV04] for details).</p>
+
+<p>The barrier method can be extended to cone programming by using the
+<em>generalized logarithm</em>.</p>
+
+<p><strong>end interlude</strong></p>
+
+<p><em>Primal-Dual Methods for Linear Programming</em></p>
+<ul>
+  <li>As of ‘09, these were one of the most popular methods for solving linear
+programs.</li>
+</ul>
+
+<h3 id="approximate-subgradient-methods">Approximate Subgradient Methods</h3>
+
+<p>Using approximate subgradients can lead to computational savings or even
+faster convergence.</p>
+
+<p><em><script type="math/tex">\epsilon</script>-Subgradient methods</em>
+An <strong><script type="math/tex">\epsilon</script>-subgradient</strong> is just like a normal subgradient except it
+can be up to <script type="math/tex">\epsilon</script> below the graph of the function. More formally, <script type="math/tex">g</script>
+is an <script type="math/tex">\epsilon</script>-subgradient* of <script type="math/tex">f</script> at <script type="math/tex">x</script> if</p>
+
+<script type="math/tex; mode=display">f(z) \geq f(x) + (z-x)^Tg - \epsilon</script>
+
+<p>Note that</p>
+
+<script type="math/tex; mode=display">\cap_{\epsilon \downarrow 0} \partial_\epsilon f(x) = \partial f(x).</script>
+
+<p>Geometrically, <script type="math/tex">g</script> is an <script type="math/tex">\epsilon</script>-subgradient of <script type="math/tex">f</script> only if the
+latter’s epigraph is contained in the positive halfspace carved out by the
+hyperplane with normal <script type="math/tex">(-g, 1)</script> that passes through <script type="math/tex">(x, f(x) - \epsilon)</script>.
+This can be seen by rearranging the definition to get</p>
+
+<script type="math/tex; mode=display">(-g, 1)^T(z, f(z)) \geq (-g, 1)(x, f(x) - \epsilon).</script>
+
+<p><script type="math/tex">\epsilon</script>-subgradient methods are nearly identical to subgradient methods,
+except the former aim to converge to the $\epsilon$-optimal set, while the
+latter converge to the optimal set.</p>
+
+<p><em>Incremental Subgradient Methods</em></p>
+<ul>
+  <li>Apply to minmization over closed convex set <script type="math/tex">X</script> with additive cost function
+<script type="math/tex">f(x)</script>, where
+<script type="math/tex">f(x) - \sum_{i=1}^{m} \tilde{f}_i(x),</script>
+each <script type="math/tex">\tilde{f}_i</script> is convex.</li>
+  <li>This is a generalization of stochastic gradient descent.</li>
+  <li>ISM consists of outer iterations, each of which are a cycle of $m$ inner
+iterations.</li>
+  <li>Key idea: If <script type="math/tex">x</script> (weight vector) has not changed too much during
+an iteration, then the subgradient at the <script type="math/tex">i</script>-th inner iteration is
+approximately equal to the subgradient of <script type="math/tex">f_i</script> at <script type="math/tex">x</script> (i.e., <script type="math/tex">x</script>’s
+value at the beginning of the cycle).</li>
+</ul>
+
+<p><em>Subgradient Methods with Randomization</em></p>
+<ul>
+  <li>In SGD, randomly permuting the data samples can speed convergence and
+decrease error</li>
+  <li><span class="todo">TODO: Look into this</span></li>
+</ul>
+
+<p><em>Incremental Proximal Methods</em></p>
+<ul>
+  <li>like incremental subgradient methods …  <span class="todo">todo</span></li>
+</ul>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/12/07/ap-first-results/">
+            First results for alternating projection acceleration
+            <small>07 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/visual-checklist/">
+            Checklist
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/qp-alt-proj/">
+            Literature Review: QP + Alternating Projections
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

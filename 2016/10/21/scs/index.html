@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      SCS: Conic Optimization &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">SCS: Conic Optimization</h1>
+  <span class="post-date">21 Oct 2016</span>
+  <div class="tags">
+    
+      [<a href="/tags#scs" class="tag">scs</a>]
+    
+      [<a href="/tags#operator-splitting" class="tag">operator-splitting</a>]
+    
+      [<a href="/tags#projections" class="tag">projections</a>]
+    
+  </div>
+  <br/>
+  <p>Key Idea: SCS reduces the problem of solving a convex cone program to the
+problem of finding a nonzero point in the intersection of a subspace and a
+cone.</p>
+
+<p>Key Idea: Can take many convex problems and convert them into feasibility
+problems by forming the KKT system (i.e., system of equations and inequalities
+that constitute the KKT optimality conditions)!</p>
+
+<p>primal-dual pair –&gt; hoomogeneous self-dual embedding = cvx feasability problem
+–&gt; solve with ADMM</p>
+
+<p>nonzero solution to embedding –&gt; solution to original; else certificate of
+infeasibility</p>
+
+<p>Homogeneous self-dual embeddings traditionally used in interior-point methods.</p>
+
+<h3 id="primal-dual-pair">Primal-Dual Pair</h3>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\optmin{x,s}{c^Tx}{Ax + s = b \\ &&& (x, s) \in \mathbb{R}^n \times \mathcal{K},} %]]></script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\optmax{r, y}{-b^Ty}{-A^Ty + r = c \\ &&& (r, y) \in \{0\}^n \times \mathcal{K}^*,} %]]></script>
+
+<h3 id="kkt-conditions">KKT Conditions</h3>
+<p>The KKT conditions are given by</p>
+
+<p><script type="math/tex">Ax^* + s^* = b, \quad s^* \in \mathcal{K},</script>
+<script type="math/tex">A^Ty^* + c = r^*, \quad r^* = 0, \quad y^* \in \mathcal{K}^*, \quad
+(y^*)^Ts^* = 0</script></p>
+
+<p>The KKT conditions can be embedded into a system of equations and inclusions
+to obtain a feasibility problem:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\begin{bmatrix} r \\ s \\ 0 \end{bmatrix} =
+\begin{bmatrix} 0 & A^T \\ -A & 0 \\ c^T & b^T \end{bmatrix}
+\begin{bmatrix}x \\ y\end{bmatrix} +
+\begin{bmatrix}c \\ b \\ 0 \end{bmatrix}
+\end{align*} %]]></script>
+
+<p>subject to</p>
+
+<script type="math/tex; mode=display">(x, s, r, y) \in
+\mathbb{R}^n \times \mathcal{K} \times \{0\}^n \times \mathcal{K}^*,</script>
+
+<p>where the last equality implicitly encodes complementary slackness and
+explicitly enforces the duality gap to be zero.</p>
+
+<h3 id="homogeneous-self-dual-embedding">Homogeneous Self-Dual Embedding</h3>
+<p>The above KKT system has no solution if the original problem is either
+primal or dual infeasible. We can get around this problem by adding two
+non-negative variables <script type="math/tex">\tau</script> and <script type="math/tex">\kappa</script> to the embedding:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\begin{bmatrix} r \\ s \\ \kappa \end{bmatrix} =
+\begin{bmatrix} 0 & A^T & c \\ -A & 0 & b \\ -c^T & -b^T & 0\end{bmatrix}
+\begin{bmatrix}x \\ y \\ \tau \end{bmatrix}
+\end{align*}. %]]></script>
+
+<p>A special feature of this problem is that at most of of <script type="math/tex">\kappa</script> and <script type="math/tex">\tau</script>
+are nonzero because <script type="math/tex">(x, y, \tau)^T(r, s, \kappa)</script> equals <script type="math/tex">0</script> at every
+solution (due to skew symmetry), and each component of the inner product
+is non-negative.</p>
+
+<p>Possible cases:</p>
+<ol>
+  <li><script type="math/tex">\tau > 0</script>: Then the original problem has a solution (<script type="math/tex">\tau</script>) is a
+scaling factor.</li>
+  <li><script type="math/tex">\tau = 0, \kappa > 0</script>: Then the duality gap is negative (primal or
+dual is infeasible).</li>
+  <li><script type="math/tex">\tau = \kappa - 0</script> provides us with the least information.
+The problem can be expressed as</li>
+</ol>
+
+<p>Let <script type="math/tex">u = \begin{bmatrix} x \\ y \\ \tau \end{bmatrix}</script>,
+<script type="math/tex">v = \begin{bmatrix} r \\ s \\ \kappa \end{bmatrix}</script>, <script type="math/tex">Q</script> be the big matrix
+above. Then the modified KKT problem becomes</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\optfind{(u,v)}{v = Qu \\ &&& (u, v) \in \mathcal{C} \times \mathcal{C^*},} %]]></script>
+
+<p><script type="math/tex">\mathcal{C} = \mathbb{R}^n \times \mathcal{K}^* \times \mathbb{R}_{+}</script>.</p>
+
+<p>Note that the equality constraint can be rewritten as</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{bmatrix}Q & -I \end{bmatrix}\begin{bmatrix} u \\ v \end{bmatrix} = 0 %]]></script>
+
+<p>Written this way, it becomes evident that the SCS problem can be solved with
+the alternating projections method.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/12/07/ap-first-results/">
+            First results for alternating projection acceleration
+            <small>07 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/visual-checklist/">
+            Checklist
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/qp-alt-proj/">
+            Literature Review: QP + Alternating Projections
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

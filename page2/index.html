@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Convex Optimization &middot; Research Notebook
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/28/heavy-ball/">
+        The Heavy Ball Method
+      </a>
+    </h1>
+    <span class="post-date">28 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#heavy-ball" class="tag">heavy-ball</a>]
+	
+	  [<a href="/tags#momentum" class="tag">momentum</a>]
+	
+	  [<a href="/tags#polyak" class="tag">polyak</a>]
+	
+	</div>
+	<p>The heavy-ball method is a <em>multi-step</em> iterative method that exploits iterates
+prior to the most recent one. It does so by maintaining the
+<strong>momentum</strong> of the previous two iterates. If you imagine
+each iterate as a point in the trajectory of a falling ball, then the points
+carry with them a momentum or a velocity. The heavy-ball method exploits that
+velocity:</p>
+
+<script type="math/tex; mode=display">x^{(k+1)} = x^{k} - \alpha \nabla f(x^{(k)}) + \beta(x^{(k)} - x^{(k-1)}),</script>
+
+<p>where <script type="math/tex">\alpha, \beta \geq 0</script> are parameters. The heavy ball method is one
+way of guarding against zigzagging trajectories in iterative descent and
+alternating projection methods. (Scribed from Polyak’s book.)</p>
+
+<p>I can’t find anything about accelerating alternating projections with the
+heavy-ball method, though Escalante’s book <a href="/texts/Alternating Projection Methods.pdf"><em>Alternating Projection Methods</em></a>
+does describe how to perform a line search when all of the sets are
+affine (I imagine the technique extends beyond the affine case).</p>
+
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/28/alternating-projection-experiments/">
+        Experiments for Alternating Projections
+      </a>
+    </h1>
+    <span class="post-date">28 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#experiments" class="tag">experiments</a>]
+	
+	  [<a href="/tags#alternating-projections" class="tag">alternating-projections</a>]
+	
+	  [<a href="/tags#proposal" class="tag">proposal</a>]
+	
+	</div>
+	<p>Steps:</p>
+
+<ol>
+  <li>Framework for <strong>generating random cone programs</strong>, (see extended SCS paper,
+look for code) generating the KKT matrix and in particular the affine set
+and the cone whose intersection we wish to probe <sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>.</li>
+  <li>Base class for the <strong>model</strong>: <strong>feasibility problem</strong>.</li>
+  <li>Base class for <strong>algorithms: iterative (projection)</strong>.</li>
+  <li>Inherited classes, descendants of (3), that <strong>implement various projection
+algorithms</strong>.</li>
+</ol>
+
+<p>One thing, though: I’d like to, at least initially, use CVXPY in order to
+implement the more involved acceleration schemes (for example, the plane search
+along the points in the affine set). Actually, I’d like to use CVXPY for <em>all</em>
+of my algorithms, because I don’t actually know how to write algorithms to
+project onto convex sets … (!). // Taking advantage of special cone structures.</p>
+
+<p>Scratch that. I know how to write algorithms to project onto convex sets, or
+I vaguely know how to (subgradient descent methods, for example). What I don’t
+know, or don’t yet buy (it is important for me to buy this!), is whether it is
+often the case that it is easier to project onto <script type="math/tex">\mathcal{K}</script> and <script type="math/tex">\mathcal{A}</script>
+individually rather than onto <script type="math/tex">\mathcal{K} \cap \mathcal{A}</script> directly.</p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+
+      <p>Kind of strange because there’s only (I think) one point in the
+intersection of the two sets. The solution, if it exists, is unique.
+But I could be wrong. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/24/boyd/">
+        Professor Boyd [10/24/2016]
+      </a>
+    </h1>
+    <span class="post-date">24 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#boyd" class="tag">boyd</a>]
+	
+	  [<a href="/tags#QP" class="tag">QP</a>]
+	
+	  [<a href="/tags#alternating-projections" class="tag">alternating-projections</a>]
+	
+	  [<a href="/tags#projections" class="tag">projections</a>]
+	
+	  [<a href="/tags#acceleration" class="tag">acceleration</a>]
+	
+	</div>
+	<h2 id="notes-from-the-meeting">Notes from the meeting</h2>
+<p>Goal: See if <em>projection methods</em> can be accelerated by more intelligent
+selection of the iterates. In particular, make more use of the information
+that we collect along the way during projection: supporting hyperplanes and
+their associated halfspaces, and sequences of iterates upon which to do a
+line search.</p>
+
+<h3 id="projecting-onto-an-affine-set-and-a-convex-cone-is-general">Projecting onto an affine set and a convex cone is general</h3>
+<p>Consider starting with an <em>affine set and a convex cone</em>. This is the most
+general setting – it generalizes to any intersection of cones. To see this,
+say that we wanted to project a vector <script type="math/tex">x</script> onto <script type="math/tex">C = C_1 \cap C_2 \cap \ldots \cap C_r</script>,
+each <script type="math/tex">C_i \in \mathbb{R}^n</script>. Form</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\tilde{C} &= C_1 \times C_2 \times \ldots \times C_r \\
+\tilde{A} &= \{z \mid z_1 = z_2 = \ldots = z_r \}, & z = [z_1, z_2, \ldots, z_r]^T
+\end{align*} %]]></script>
+
+<p>Finding a point in <script type="math/tex">\underset{i}\cap C_i</script> is equivalent to finding a point
+in <script type="math/tex">\tilde{C} \cap \tilde{A}</script>. Note that <script type="math/tex">\tilde{C}</script> is a convex cone and
+that <script type="math/tex">\tilde{A}</script> is an affine set. To project onto <script type="math/tex">\tilde{A}</script> from
+<script type="math/tex">\tilde{C}</script>, we just take the average of each block <script type="math/tex">x_i</script>.</p>
+
+<script type="math/tex; mode=display">\begin{bmatrix}
+x_1 \\
+x_2 \\
+\ldots \\
+x_r
+\end{bmatrix} \xrightarrow{\mathcal{P}} C_1 \times C_2 \times \ldots \times C_r \xrightarrow[\text{ average }]{\mathcal{P}} A</script>
+
+<h3 id="projections-can-be-cheap-even-for-extremely-high-dimensional-data">Projections can be cheap, even for extremely high dimensional data</h3>
+<p>Say we have some variable <script type="math/tex">x \in \mathbb{R}^{10^7}</script> and a fixed <script type="math/tex">z</script> in the same
+space, and say we want <script type="math/tex">x</script> to be the projection of <script type="math/tex">z</script> onto a polyhedron.
+Provided that the polyhedron is defined by a small number of halfpsaces, we can
+compute this projection extremely cheaply. To be more concrete, our optimization
+problem is of the form</p>
+
+<script type="math/tex; mode=display">\optmin{x}{\frac{1}{2}\pnorm{x - z}{2}^2}{Fx \leq g},</script>
+
+<p>where <script type="math/tex">F \in \mathbb{R}^{10 \times 10^7}</script>. That is, <script type="math/tex">F</script> is short and fat. The
+fact that <script type="math/tex">F</script> is short is precisely what will let us compute the projection
+of <script type="math/tex">z</script> onto the polyhedron efficiently.</p>
+
+<p>The Lagrangian of the above problem is</p>
+
+<script type="math/tex; mode=display">\mathcal{L}(x, \gamma) = \frac{1}{2}\pnorm{x - z}{2}^2 + \gamma^T(Fx - g),
+\quad \gamma \in \mathbb{R}^{10}.</script>
+
+<p>Minimizing it in the normal way, we have</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+&& \nabla_x \mathcal{L}(x, \gamma) &= 0 \\
+&\iff & x - z + F^T\gamma &= 0 \\
+&\iff & x &= z - F^T\gamma
+\end{align*} %]]></script>
+
+<p>Substituting <script type="math/tex">x = z - F^T\gamma</script> into our objective function eliminates both
+<script type="math/tex">z</script> and <script type="math/tex">x</script>:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\pnorm{z - F^T\gamma - z}{2}^2 &= \pnorm{F^T\gamma}{2}^2 \\
+&= (\gamma^T F^T)^T(F^T\gamma) \\
+&= \gamma^T FF^T \gamma. \\
+\end{align*} %]]></script>
+
+<p>Note that <script type="math/tex">FF^T \in \mathbb{R}^{10 \times 10}</script>! Our minimization problem has
+become</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\optmin{\gamma}{\frac{1}{2}\gamma^T FF^T \gamma}{Fz -  FF^T\gamma \leq g, \\ &&& \gamma \geq 0.} %]]></script>
+
+<p>We can solve the problem easily after paying the overhead to compute <script type="math/tex">Fz</script>
+and <script type="math/tex">FF^T</script>.</p>
+
+<h3 id="generating-a-large-random-cone-program">Generating a large, random cone program.</h3>
+<p>Recall the KKT conditions for the problem in SCS.</p>
+
+<p>Randomly generate <script type="math/tex">z \in_{\mathcal{R}} \mathbb{R}^n</script>. Generate <script type="math/tex">x = \Pi_C(z)</script>.
+Then generate <script type="math/tex">s = z - \Pi(z) = \Pi_{C^*}(z)</script>. We will have <script type="math/tex">x^Ts = 0, x \in C,
+s \in C^{*}</script>. From there, enough will be specified to generate the data matrix
+<script type="math/tex">A</script> and the vector <script type="math/tex">b</script>. What’s more, you’ll have the solution <script type="math/tex">x</script>, too.</p>
+
+<h3 id="canonical-sources-and-algorithms-to-read-up-on">Canonical sources and algorithms to read up on</h3>
+<ol>
+  <li><a href="/papers/ON PROJECTION ALGORITHMS FOR SOLVING CONVEX FEASIBILITY PROBLEMS.pdf">Borwein’s survey on alternating projections</a></li>
+  <li><a href="/papers/HeavyBallLinear.pdf">On the heavy ball method and momentum</a></li>
+  <li>“FCM Method,” from the 364B notes? Something about cutting planes with
+memory=2. I couldn’t find it.</li>
+</ol>
+
+<h3 id="ideas-on-accelerating-alternating-projections">Ideas on accelerating alternating projections</h3>
+<ol>
+  <li>Dumbest, simplest idea (that just might work well enough): project onto
+the intersection of the supporting halfspaces to form a new iterate.</li>
+  <li>Somewhat smarter: Keep more than 2 halfspaces. (Will this help? Certainly
+not in <script type="math/tex">\mathbb{R}^2.</script>)</li>
+  <li>Somewhat smarter still: Project onto more the halfspaces, but also do a
+line/plane search of the previous <script type="math/tex">k</script> iterates, <script type="math/tex">k</script> a parameter.</li>
+</ol>
+
+<p>Suggestion (2):</p>
+<ul>
+  <li>Say we let <script type="math/tex">\tilde{F}</script> be the supporting hyperplanes we collect for
+ the convex cone.</li>
+  <li>And let <script type="math/tex">F</script> be a 0-1 diagonal matrix that whose <script type="math/tex">i</script>-th diagonal entry
+is 1 if and only if we’re picking up the <script type="math/tex">i</script>-th equality constraint.</li>
+  <li>Then, at each step, we’re solving</li>
+</ul>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\optmin{x}{\pnorm{x - z}{2}^2}{ FAx = b, \\ &&& \tilde{F}x \leq \tilde{b} } %]]></script>
+
+<p>Key question: Can we solve this efficiently? Will the trick above help?
+Will FA become bigger than A? (No.)</p>
+
+<p>Suggestion (3):</p>
+
+<script type="math/tex; mode=display">\optmin{\theta}{\dist{\sum_{i} \theta_i a_i}{\mathcal{C}}^2}{\sum_{i} \theta_i = 1,}</script>
+
+<p><script type="math/tex">a_i</script> are a finite number of previous iterates that were on the affine set. That is, we’re doing a
+plane search. Can we solve this cheaply? We don’t have to solve it exactly, just
+need to do better than projecting the last of the iterates (the most recent one) onto
+<script type="math/tex">\mathcal{C}</script>, because that’s what we do by default.
+We’re assuming we know how to project onto <script type="math/tex">\mathcal{C}</script>.
+Is the objective function differentiable? Does the cost still go down if we
+do this? Do this, then do the cutting plane strategy, then project onto affine?</p>
+
+<p>Boyd was under the impression / had the feeling that if we did three “weird” things,
+things might just work out well. One or two might not suffice, however.</p>
+
+<h3 id="papers-to-bring-up">Papers to bring up:</h3>
+<ol>
+  <li><a href="/papers/SET INTERSECTION PROBLEMS- SUPPORTING HYPERPLANES AND QUADRATIC PROGRAMMING.pdf">Set Intersection Problems: Supporting Hyperplanes &amp; Quadratic Programming</a>
+    <ul>
+      <li>Upshot: superlinear convergence in certain cases</li>
+      <li>Work to be done: Numerical validations on real test suite</li>
+    </ul>
+  </li>
+  <li>SuperMann: Special case –&gt; find point in intersection of (convex) sets</li>
+</ol>
+
+<h3 id="approaches-to-discuss-for-accelerating-alternating-projections">Approaches to discuss for accelerating alternating projections:</h3>
+<ol>
+  <li>Solve QP + over-project? (Note that projecting onto the intersection of
+two halfspaces is a simple cone projection problem.)</li>
+  <li>What if we just initialize our new iterate at the intersection of the
+two halfspaces (when finding the intersection of two sets)?</li>
+  <li>Randomness (Mert Pilanci’s work) (choose which halfspaces to use uniformly
+at random?)</li>
+</ol>
+
+<h3 id="questions">Questions:</h3>
+<ol>
+  <li>Canonical sources?</li>
+</ol>
+
+<h3 id="action-items">Action items:</h3>
+<ol>
+  <li>Hooked into / clone the test suite (Mark N…?)</li>
+  <li>Implement vs. theoretical guarantees – what’s the best way to go about
+getting a feel for how “good” an algorithm is? A bit of both simultaneously?
+    <ul>
+      <li>prove convergence at the very least …?</li>
+    </ul>
+  </li>
+</ol>
+
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/21/scs/">
+        SCS: Conic Optimization
+      </a>
+    </h1>
+    <span class="post-date">21 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#scs" class="tag">scs</a>]
+	
+	  [<a href="/tags#operator-splitting" class="tag">operator-splitting</a>]
+	
+	  [<a href="/tags#projections" class="tag">projections</a>]
+	
+	</div>
+	<p>Key Idea: SCS reduces the problem of solving a convex cone program to the
+problem of finding a nonzero point in the intersection of a subspace and a
+cone.</p>
+
+<p>Key Idea: Can take many convex problems and convert them into feasibility
+problems by forming the KKT system (i.e., system of equations and inequalities
+that constitute the KKT optimality conditions)!</p>
+
+<p>primal-dual pair –&gt; hoomogeneous self-dual embedding = cvx feasability problem
+–&gt; solve with ADMM</p>
+
+<p>nonzero solution to embedding –&gt; solution to original; else certificate of
+infeasibility</p>
+
+<p>Homogeneous self-dual embeddings traditionally used in interior-point methods.</p>
+
+<h3 id="primal-dual-pair">Primal-Dual Pair</h3>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\optmin{x,s}{c^Tx}{Ax + s = b \\ &&& (x, s) \in \mathbb{R}^n \times \mathcal{K},} %]]></script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\optmax{r, y}{-b^Ty}{-A^Ty + r = c \\ &&& (r, y) \in \{0\}^n \times \mathcal{K}^*,} %]]></script>
+
+<h3 id="kkt-conditions">KKT Conditions</h3>
+<p>The KKT conditions are given by</p>
+
+<p><script type="math/tex">Ax^* + s^* = b, \quad s^* \in \mathcal{K},</script>
+<script type="math/tex">A^Ty^* + c = r^*, \quad r^* = 0, \quad y^* \in \mathcal{K}^*, \quad
+(y^*)^Ts^* = 0</script></p>
+
+<p>The KKT conditions can be embedded into a system of equations and inclusions
+to obtain a feasibility problem:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\begin{bmatrix} r \\ s \\ 0 \end{bmatrix} =
+\begin{bmatrix} 0 & A^T \\ -A & 0 \\ c^T & b^T \end{bmatrix}
+\begin{bmatrix}x \\ y\end{bmatrix} +
+\begin{bmatrix}c \\ b \\ 0 \end{bmatrix}
+\end{align*} %]]></script>
+
+<p>subject to</p>
+
+<script type="math/tex; mode=display">(x, s, r, y) \in
+\mathbb{R}^n \times \mathcal{K} \times \{0\}^n \times \mathcal{K}^*,</script>
+
+<p>where the last equality implicitly encodes complementary slackness and
+explicitly enforces the duality gap to be zero.</p>
+
+<h3 id="homogeneous-self-dual-embedding">Homogeneous Self-Dual Embedding</h3>
+<p>The above KKT system has no solution if the original problem is either
+primal or dual infeasible. We can get around this problem by adding two
+non-negative variables <script type="math/tex">\tau</script> and <script type="math/tex">\kappa</script> to the embedding:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\begin{bmatrix} r \\ s \\ \kappa \end{bmatrix} =
+\begin{bmatrix} 0 & A^T & c \\ -A & 0 & b \\ -c^T & -b^T & 0\end{bmatrix}
+\begin{bmatrix}x \\ y \\ \tau \end{bmatrix}
+\end{align*}. %]]></script>
+
+<p>A special feature of this problem is that at most of of <script type="math/tex">\kappa</script> and <script type="math/tex">\tau</script>
+are nonzero because <script type="math/tex">(x, y, \tau)^T(r, s, \kappa)</script> equals <script type="math/tex">0</script> at every
+solution (due to skew symmetry), and each component of the inner product
+is non-negative.</p>
+
+<p>Possible cases:</p>
+<ol>
+  <li><script type="math/tex">\tau > 0</script>: Then the original problem has a solution (<script type="math/tex">\tau</script>) is a
+scaling factor.</li>
+  <li><script type="math/tex">\tau = 0, \kappa > 0</script>: Then the duality gap is negative (primal or
+dual is infeasible).</li>
+  <li><script type="math/tex">\tau = \kappa - 0</script> provides us with the least information.
+The problem can be expressed as</li>
+</ol>
+
+<p>Let <script type="math/tex">u = \begin{bmatrix} x \\ y \\ \tau \end{bmatrix}</script>,
+<script type="math/tex">v = \begin{bmatrix} r \\ s \\ \kappa \end{bmatrix}</script>, <script type="math/tex">Q</script> be the big matrix
+above. Then the modified KKT problem becomes</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\optfind{(u,v)}{v = Qu \\ &&& (u, v) \in \mathcal{C} \times \mathcal{C^*},} %]]></script>
+
+<p><script type="math/tex">\mathcal{C} = \mathbb{R}^n \times \mathcal{K}^* \times \mathbb{R}_{+}</script>.</p>
+
+<p>Note that the equality constraint can be rewritten as</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{bmatrix}Q & -I \end{bmatrix}\begin{bmatrix} u \\ v \end{bmatrix} = 0 %]]></script>
+
+<p>Written this way, it becomes evident that the SCS problem can be solved with
+the alternating projections method.</p>
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/21/change-of-basis/">
+        Change of Basis
+      </a>
+    </h1>
+    <span class="post-date">21 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#linear-algebra" class="tag">linear-algebra</a>]
+	
+	  [<a href="/tags#basis" class="tag">basis</a>]
+	
+	  [<a href="/tags#projections" class="tag">projections</a>]
+	
+	</div>
+	<p>A coordinate system is a way from translating from numbers to a vector
+in Euclidean space.</p>
+
+<p>Say you have a set of basis vectors <script type="math/tex">b_1, b_2</script> which differ from your basis
+vectors <script type="math/tex">e_1, e_2</script>.</p>
+
+<p>A matrix <script type="math/tex">% <![CDATA[
+B = \begin{bmatrix} b_1 & b_2\end{bmatrix} %]]></script> can be thought of as
+a transformation that moves <script type="math/tex">e_1, e_2</script> to <script type="math/tex">b_1, b_2</script>. B expresses the
+actual coordinates of a vector expressed in the foreign basis of <script type="math/tex">b_1, b_2</script>
+(from her language to our language). The inverse <script type="math/tex">B^{-1}</script> takes a vector
+written in our language to a vector written in her language.</p>
+
+<p><em>Change of coordinates</em></p>
+
+<p>Say <script type="math/tex">x = x_1e_1 + x_2e_2 + \ldots + x_ne_n</script>. The <script type="math/tex">x_i</script> are the coordinates
+of <script type="math/tex">x</script> in the standard basis. If <script type="math/tex">b_1, \ldots, b_n</script> is another basis for
+<script type="math/tex">\mathbb{R}^n</script>, then</p>
+
+<script type="math/tex; mode=display">x = \tilde{x}_1b_1 + \ldots + \tilde{x}_nb_n,</script>
+
+<p>where <script type="math/tex">\tilde{x} = B^{-1}x</script>, and <script type="math/tex">\tilde{x}_i = (B^{-1})_i^Tx_i</script> is the
+first coordinate of <script type="math/tex">x</script> in the <script type="math/tex">b_1, \ldots, b_n</script> basis. This
+is apparent because <script type="math/tex">x = BB^{-1}x = \tilde{x}_1b_1 + \ldots + \tilde{x}_nb_n</script>.</p>
+
+
+	
+		<a href="/2016/10/21/change-of-basis/">Read more</a>
+	
+  </div>
+  
+</div>
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/page3">Older</a>
+  
+  
+    
+      <a class="pagination-item newer" href="/">Newer</a>
+    
+  
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

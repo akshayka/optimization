@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Change of Basis &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Change of Basis</h1>
+  <span class="post-date">21 Oct 2016</span>
+  <div class="tags">
+    
+      [<a href="/tags#linear-algebra" class="tag">linear-algebra</a>]
+    
+      [<a href="/tags#basis" class="tag">basis</a>]
+    
+      [<a href="/tags#projections" class="tag">projections</a>]
+    
+  </div>
+  <br/>
+  <p>A coordinate system is a way from translating from numbers to a vector
+in Euclidean space.</p>
+
+<p>Say you have a set of basis vectors <script type="math/tex">b_1, b_2</script> which differ from your basis
+vectors <script type="math/tex">e_1, e_2</script>.</p>
+
+<p>A matrix <script type="math/tex">% <![CDATA[
+B = \begin{bmatrix} b_1 & b_2\end{bmatrix} %]]></script> can be thought of as
+a transformation that moves <script type="math/tex">e_1, e_2</script> to <script type="math/tex">b_1, b_2</script>. B expresses the
+actual coordinates of a vector expressed in the foreign basis of <script type="math/tex">b_1, b_2</script>
+(from her language to our language). The inverse <script type="math/tex">B^{-1}</script> takes a vector
+written in our language to a vector written in her language.</p>
+
+<p><em>Change of coordinates</em></p>
+
+<p>Say <script type="math/tex">x = x_1e_1 + x_2e_2 + \ldots + x_ne_n</script>. The <script type="math/tex">x_i</script> are the coordinates
+of <script type="math/tex">x</script> in the standard basis. If <script type="math/tex">b_1, \ldots, b_n</script> is another basis for
+<script type="math/tex">\mathbb{R}^n</script>, then</p>
+
+<script type="math/tex; mode=display">x = \tilde{x}_1b_1 + \ldots + \tilde{x}_nb_n,</script>
+
+<p>where <script type="math/tex">\tilde{x} = B^{-1}x</script>, and <script type="math/tex">\tilde{x}_i = (B^{-1})_i^Tx_i</script> is the
+first coordinate of <script type="math/tex">x</script> in the <script type="math/tex">b_1, \ldots, b_n</script> basis. This
+is apparent because <script type="math/tex">x = BB^{-1}x = \tilde{x}_1b_1 + \ldots + \tilde{x}_nb_n</script>.</p>
+
+<!--more-->
+
+<p><em>Change of coordinates is nice for orthonormal bases</em></p>
+
+<p>Let <script type="math/tex">V</script> be an <script type="math/tex">n</script>-dimensional vector space with orthonormal basis
+<script type="math/tex">a_1, a_2, \ldots, a_n</script>. Note that <script type="math/tex">A^{-1} = A</script>. So the <script type="math/tex">i</script>-th coordinate
+of a vector <script type="math/tex">v</script> in the basis <script type="math/tex">\{a_i\}</script> is just
+<script type="math/tex">u^Ta_i = \langle u, a_i \rangle</script>. In particular, this means that</p>
+
+<script type="math/tex; mode=display">v = \langle v, a_1 \rangle a_1 + \langle v, a_2 \rangle a_2 +
+\ldots + \langle v, a_n \rangle a_n.</script>
+
+<p>That means that <script type="math/tex">v</script> is just the sum of its projections onto each of the basis
+vectors <script type="math/tex">a_i</script>. Note that both pairwise orthogonality and normality are needed
+for this property to hold.</p>
+
+<p>A similar formulation leads to a natural proof that, if
+<script type="math/tex">U</script> is a subspace of <script type="math/tex">V</script>, <script type="math/tex">V = U \oplus U^\perp</script>.
+Write <script type="math/tex">v</script> as <script type="math/tex">v = u + w</script>. Let <script type="math/tex">\{e_1, e_2, \ldots, e_m\}</script> be an
+orthonormal basis for <script type="math/tex">U</script>, <script type="math/tex">m \leq n</script>. Choose <script type="math/tex">u</script> such that</p>
+
+<script type="math/tex; mode=display">u = \langle v, e_1 \rangle e_1 + \langle v, e_2 \rangle e_2 +
+\ldots + \langle v, e_m \rangle e_m</script>
+
+<p>and</p>
+
+<script type="math/tex; mode=display">w = v - u = v - \langle v, e_1 \rangle e_1 + \langle v, e_2 \rangle e_2 +
+\ldots + \langle v, e_m \rangle e_m.</script>
+
+<p>You can verify that <script type="math/tex">\langle u, w \rangle = 0</script>, and that
+<script type="math/tex">v \in U \cap U^\perp \implies v = 0 \implies U \cap U^\perp = \{0\}</script>.</p>
+
+<p>The above construction of <script type="math/tex">u</script> is in fact the definition of the orthogonal
+projection of <script type="math/tex">v \in V</script> onto <script type="math/tex">U</script>. The upshot is that if we have an orthonormal basis <script type="math/tex">\{e_i\}</script>
+of a subspace <script type="math/tex">U \subseteq V</script>, then we get, for “free”, the matrix <script type="math/tex">P_U</script> which projects
+vectors from <script type="math/tex">V</script> onto <script type="math/tex">U</script>. In particular, <script type="math/tex">P_U = EE^T</script>, where</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+E = \begin{bmatrix}
+\vert & \vert & \ldots & \vert \\
+e_1 & e_2 & \ldots & e_m  \\
+\vert & \vert & \ldots & \vert \\
+\end{bmatrix}. %]]></script>
+
+<p>From this construction we can also see that <script type="math/tex">P_U^T = P_U</script>. Note
+that <script type="math/tex">E</script> is <strong>not</strong> necessarily an orthogonal matrix (in particular, it is not
+necessarily square – it’s only square when U and V have the same dimension).
+And <script type="math/tex">P_U</script> is not necessarily orthogonal. Indeed, it doesn’t even necessarily 
+have orthogonal or orthonormal columns.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/12/07/ap-first-results/">
+            First results for alternating projection acceleration
+            <small>07 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/visual-checklist/">
+            Checklist
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/qp-alt-proj/">
+            Literature Review: QP + Alternating Projections
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

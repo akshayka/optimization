@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      ADMM &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">ADMM</h1>
+  <span class="post-date">30 Oct 2016</span>
+  <div class="tags">
+    
+      [<a href="/tags#admm" class="tag">admm</a>]
+    
+      [<a href="/tags#distributed-optimization" class="tag">distributed-optimization</a>]
+    
+      [<a href="/tags#feasibility" class="tag">feasibility</a>]
+    
+      [<a href="/tags#projections" class="tag">projections</a>]
+    
+  </div>
+  <br/>
+  <h3 id="introduction">Introduction</h3>
+<ul>
+  <li>Common characteristics of big data:
+    <ul>
+      <li>large (billions of examples)</li>
+      <li>high dimensional</li>
+      <li>stored and/or collected in a distributed fashion</li>
+    </ul>
+  </li>
+  <li><script type="math/tex">\exists</script> need for rich, scalable algorithms</li>
+  <li>a <em>decomposition-coordination</em> procedure: solutions to local subproblems are
+coordinated to find solution to global problem</li>
+</ul>
+
+<!--more-->
+
+<h3 id="spiritual-predecessors">Spiritual Predecessors</h3>
+<p>Dual ascent is gradient descent on the dual problem. For example, for an
+equality constrained optimization problem, the Lagrangian is</p>
+
+<script type="math/tex; mode=display">\mathcal{L}(x,y)  = f(x) + y^T(Ax - b).</script>
+
+<p>Then we set <script type="math/tex">x^{k+1} = \operatorname{argmin}_x \mathcal{L}(x, y^k)</script>,
+<script type="math/tex">y^{k+1} = y^k + \alpha_k (Ax^{k+1} - b)</script> (note that the second step is
+exactly gradient ascent on the dual variable <script type="math/tex">y</script>). Dual decomposition is the same
+thing for when <script type="math/tex">\mathcal{L}(x,y)</script> can be decomposed into
+<script type="math/tex">\mathcal{L}(x_1, x_2, \ldots, x_i, \ldots, x_n, y)</script>, where the <script type="math/tex">x_i</script> are
+subvectors of <script type="math/tex">x</script>. The dual ascent algorithm then consists of broadcast
+(broadcast <script type="math/tex">y</script> iterate) and gather (gather <script type="math/tex">x_i</script> iterates) steps.</p>
+
+<p>Augmented Lagrangian methods add a term <script type="math/tex">(\rho/2)\pnorm{Ax - b}{2}^2</script> to the
+objective function of the original problem, which often times makes the
+objective “nicer” and never changes the optimal solution to the problem (if it
+is subject to <script type="math/tex">Ax = b</script>). The problem with augmented Lagrangian methods,
+however, is that they are not amenable to parallelization, even if the original
+<script type="math/tex">f(x)</script> is separable.</p>
+
+<p>(Why shift to the dual perspective at all? Optimizing the Lagrangian leads to
+algorithms that naturally satisfy the equality constraints imposed upon us.)</p>
+
+<h3 id="admm">ADMM</h3>
+
+<p>ADMM is structurally similar to the method of multipliers for the augmented
+Lagrangian. It is applied to problems with separable objective functions
+and separable constraints. For an optimization problem of the form</p>
+
+<script type="math/tex; mode=display">\optmin{x, z}{f(x) + g(z)}{Ax + Bz = c}</script>
+
+<p>we form the augmented Lagrangian</p>
+
+<script type="math/tex; mode=display">\mathcal{L}_\rho(x, z, y) = f(x) + g(z) + y^T(Ax + Bz - c) + \rho/2 \pnorm{Ax + Bz - c}{2}^2,</script>
+
+<p>and our updates are of the form</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+x^{k+1} &= \argmin{x}{\mathcal{L}_\rho(x, z^k, y^k)} \\
+z^{k+1} &= \argmin{z}{\mathcal{L}_\rho(x^{k+1}, z, y^k)} \\
+y^{k+1} &= y^k + \rho (Ax^{k+1} + Bz^{k+1} - c).
+\end{align*} %]]></script>
+
+<p>Note that the third step is exactly gradient ascent on the dual variable <script type="math/tex">y</script>.
+There are other ways of writing the ADMM steps (e.g., there is a variant called
+scaled ADMM), but these other ways are equivalent to the formulation given above.
+With ADMM, we have the best of both worlds: we’ve got the distributed nature of
+dual decomposition, and we have the smoothness of the augmented Lagrangian.</p>
+
+<h3 id="scaled-admm">Scaled ADMM</h3>
+
+<p>Let <script type="math/tex">r=Ax + Bz - c</script> be the residual. Then we can write the Lagrangian as</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\mathcal{L}_\rho(x, z, y) &= f(x) + g(z) + y^Tr + \rho/2 \pnorm{r}{2}^2 \\
+y^Tr + \rho/2 \pnorm{r}{2}^2 &= \rho/2\pnorm{r + (1/\rho)y}{2}^2 -
+(1/2\rho)\pnorm{y}{2}^2 \\
+ &= \rho/2\pnorm{r + u}{2}^2 - \rho/2\pnorm{u}{2}^2, &
+ \text{letting } u = (1/\rho) y.
+\end{align*} %]]></script>
+
+<p>The Lagrangian becomes</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\mathcal{L}_\rho(x, z, u) &= f(x) + g(z) + \rho/2\pnorm{r + u}{2}^2 - \rho/2\pnorm{u}{2}^2,
+\end{align*} %]]></script>
+
+<p>and the ADMM update steps become</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+x^{k+1} &= \argmin{x}{f(x) + \rho/2 \pnorm{Ax + Bz^k - c + u^k}{2}^2} \\
+z^{k+1} &= \argmin{z}{g(z) + \rho/2 \pnorm{Ax^{k+1} + Bz - c + u^k}{2}^2} \\
+u^{k+1} &= u^k + Ax^{k+1} + Bz^{k+1} - c \\
+\end{align*} %]]></script>
+
+<p>where the scaled dual update is analogous to the original dual update, multiplied
+through by <script type="math/tex">1/\rho</script>. Note that <script type="math/tex">u^k</script> is the running sum of residuals <script type="math/tex">u^0 + \sum_{j=1}^{k} r^j</script>.</p>
+
+<h3 id="convex-feasibility">Convex Feasibility</h3>
+
+<p><em>ADMM for finding a point in the intersection of two sets.</em></p>
+
+<p>Say we are searching for any <script type="math/tex">x \in \mathcal{C} \cap \mathcal{D}</script>. If <script type="math/tex">f</script>
+and <script type="math/tex">g</script> are the indicator functions for <script type="math/tex">\mathcal{C}</script> and <script type="math/tex">\mathcal{D}</script>,
+respectively, then the ADMM formulation of the problem is</p>
+
+<script type="math/tex; mode=display">\optmin{x,z}{f(x) + g(z)}{x-z = 0}.</script>
+
+<p>The ADMM update steps become</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\color{blue}{x^{k+1}} &= \argmin{x}{f(x) + \rho/2 \pnorm{x - (z^k - u^k)}{2}^2} \\
+&= \color{blue}{\Pi_\mathcal{C}(z^k - u^k)} \\
+\color{blue}{z^{k+1}} &= \argmin{z}{g(z) + \rho/2 \pnorm{x^{k+1} - z + u^k}{2}^2} \\
+&= \color{blue}{\Pi_\mathcal{D}(x^{k+1} + u^k)} \\
+u^{k+1} &= u^k + x^{k+1} - z^{k+1} \\
+\end{align*} %]]></script>
+
+<p>The interpretation of <script type="math/tex">\pnorm{x^k - z^k}{2}</script> is an upper bound on
+<script type="math/tex">\dist{\mathcal{C}}{\mathcal{D}}</script>.</p>
+
+<p>In order to project onto <script type="math/tex">\cap_{i}^{N} A_{i}</script>, we can
+apply ADMM with</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\mathcal{C} &= A_1 \times A_2 \times \ldots A_N \\
+\mathcal{D} &= \{(x_1, x_2, \ldots, x_N) \in \mathbb{R}^{nN}
+\mid x_1 = x_2 = \ldots = x_N\}.
+\end{align*} %]]></script>
+
+<p>Then</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+x_i^{k+1} &= \Pi_{\mathcal{A_i}} (z^k - u_i^k) \\
+z^{k+1} &= \bar{x}^{k+1} + \bar{u}^k \\
+u_i^{k+1} &= u_i^k + x_i^{k+1} - z^{k+1}.
+\end{align*} %]]></script>
+
+<p>Equivalently, noting that <script type="math/tex">\bar{u}^{k+1} = \bar{u}^k + \bar{x}^{k+1} - z^{k+1} = 0</script>,</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+x_i^{k+1} &= \Pi_{\mathcal{A_i}} (z^k - u_i^k) \\
+u_i^{k+1} &= u_i^k + (x_i^{k+1} - \bar{x}^{k+1}).
+\end{align*} %]]></script>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/12/07/ap-first-results/">
+            First results for alternating projection acceleration
+            <small>07 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/visual-checklist/">
+            Checklist
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/qp-alt-proj/">
+            Literature Review: QP + Alternating Projections
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

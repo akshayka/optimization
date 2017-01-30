@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Convex Optimization &middot; Research Notebook
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/06/matt-wytock/">
+        Matt Wytock [10/06/16]
+      </a>
+    </h1>
+    <span class="post-date">06 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#meetings" class="tag">meetings</a>]
+	
+	  [<a href="/tags#wytock" class="tag">wytock</a>]
+	
+	  [<a href="/tags#robust" class="tag">robust</a>]
+	
+	  [<a href="/tags#scalable" class="tag">scalable</a>]
+	
+	  [<a href="/tags#Google" class="tag">Google</a>]
+	
+	  [<a href="/tags#cvxflow" class="tag">cvxflow</a>]
+	
+	  [<a href="/tags#epsilon" class="tag">epsilon</a>]
+	
+	</div>
+	<h2 id="questions-for-matt-wytock">Questions for Matt Wytock</h2>
+
+<h3 id="career">Career</h3>
+<ul>
+  <li>What motivated you to stay at Google for so long?</li>
+  <li>Why did you leave Google?
+    <ul>
+      <li><span class="meta-text"> Got interested in machine learning (smart-ass). At the time,
+very few people knew much anything about the theoretical foundations of even
+the simplest machine learning methods (for example, SGD applied to logistic regression).
+Left Google in 201_, before the neural network / machine learning zeitgeist began.</span></li>
+    </ul>
+  </li>
+  <li>Why did you leave Google for a PhD?</li>
+  <li>Why optimization in particular? Esp. at Google, machine learning – deep learning – is king. What drew you to optimization when you first began studying it, and what draws you to it today?
+    <ul>
+      <li><span class="meta-text"> Neural networks were not king at the time Wytock left Google.
+ His advisor @ CMU was probably the last of Ng’s crop who still focused on traditional
+ methods. </span></li>
+    </ul>
+  </li>
+  <li>Where do you see yourself 1, 3, 5 years from now?
+    <ul>
+      <li><span class="meta-text"> @ Google? No specific project interests him. Would embed himself
+in applied machine learning. Why not Brain? Lots of smart people, delta would be small.
+Upside of Google is the resources they provide, the ability to engineer things at
+a large scale. </span></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="open-problems-in-convex-optimization-today">Open Problems in (Convex) Optimization Today</h3>
+<ul>
+  <li>re: scalability
+    <ul>
+      <li><span class="meta-text"><strong>first-order methods scale</strong>, but they are not robust (e.g.,
+ill-conditioned data can prevent algorithms from reaching any kind of
+solution). </span></li>
+      <li><span class="meta-text"><strong>interior point methods are robust</strong>,
+but they do not scale. </span></li>
+      <li><span class="meta-text">the goal: <strong>a robust and scalable algorithm</strong></span></li>
+    </ul>
+  </li>
+  <li>re: efficiency</li>
+  <li>re: theoretical results
+    <ul>
+      <li><span class="meta-text">Convergence bounds for iterations of first-order
+methods on specific types of problems. According to Boyd, this work is
+not particularly useful.</span></li>
+    </ul>
+  </li>
+  <li>which problems interest you the most?</li>
+  <li>is there a need for a simple, first-order method for optimization that
+scales out (parallelizes) well?
+    <ul>
+      <li><span class="meta-text"><strong>Yes!</strong> But keep in mind that many, many, <em>many</em>
+researchers are working on this problem, and they’ve worked on it for many
+years.</span></li>
+    </ul>
+  </li>
+  <li>we are seeing somewhat of a renaissance in applying AI/ML to everyday problems. How do you position methodical optimization in relation to that?
+    <ul>
+      <li><span class="meta-text"> There is definitely, undeniably value added by the power of
+neural networks to learn latent feature representations. The trade-off is that
+non-convexity that they introduce. The closest thing to neural networks’ ability to
+learn features is kernel methods, and in particular
+<a href="https://people.eecs.berkeley.edu/~brecht/papers/07.rah.rec.nips.pdf">Ben Recht’s paper</a> on    random features for kernel machines. That said, neural networks and machine
+learning are not the end-all-be-all. Consider AlphaGo, for example – its
+success depended on classical artificial intelligence techniques, like tree search
+and reinforcement learning. Neural networks were just one of the many
+tools applied to solve the problem. Methodical optimization is another
+tool. You could even imagine designing features for optimization problems
+using neural networks. </span></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="cvxflow">cvxflow</h3>
+<ul>
+  <li>rough sense: how well (problem size in number variables, constraints, time / # computers)
+would SCS/SuperSCS + TensorFlow scale?</li>
+  <li>what are the bottlenecks, if any, in getting such a system to scale?
+    <ul>
+      <li><span class="meta-text">robust + scalable!</span></li>
+    </ul>
+  </li>
+  <li>stephen boyd mentioned <em>“the dream: scalable reliable convex optimization
+for anyone.”</em> How far away are we from that dream, and what needs to get
+done in order to make it a reality?
+    <ul>
+      <li><span class="meta-text">Very far. It’s not clear whether the dream will
+ever be realized, says Wytock. Need robust + scalable method.</span></li>
+    </ul>
+  </li>
+  <li>Who would benefit from materializing that dream? (Energy?)</li>
+</ul>
+
+<h3 id="epsilon">epsilon</h3>
+<ul>
+  <li>ongoing work? or put on hold?
+    <ul>
+      <li><span class="meta-text"> More or less on hold. next step is to actually
+test it on problems to see how it holds up.</span></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="energy">energy</h3>
+<ul>
+  <li>how does the work that you are currently doing (e.g., cvxflow) intersect with your interest in energy management?</li>
+</ul>
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/09/28/open-problems/">
+        Open Problems re: LPs
+      </a>
+    </h1>
+    <span class="post-date">28 Sep 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#open-problems" class="tag">open-problems</a>]
+	
+	  [<a href="/tags#LP" class="tag">LP</a>]
+	
+	</div>
+	<p>Sept 28
+Scrawlings
+Open problems and recent work</p>
+
+<ul>
+  <li>Unsolved problem in computer science:</li>
+  <li>Does linear programming admit a strongly polynomial-time algorithm?</li>
+  <li>(more unsolved problems in computer science)</li>
+  <li>Does LP admit a strongly polynomial-time algorithm?</li>
+  <li>Does LP admit a strongly polynomial algorithm to find a strictly complementary solution?</li>
+  <li>Does LP admit a polynomial algorithm in the real number (unit cost) model of computation?</li>
+  <li>Are there pivot rules which lead to polynomial-time Simplex variants?</li>
+  <li>Do all polytopal graphs have polynomially bounded diameter?</li>
+</ul>
+
+<p>Question: Why does the theory about linear programs seem to be better developed than that about nonlinear programs? Why are people generally more interested interested in linear programs than the greater optimization framework? (Or, at least, why is Wikipedia more interested in LPs than the greater framework?)</p>
+
+<p>Question: Is there tension between traditional optimization and reinforcement learning?</p>
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/09/26/meeting/">
+        Meeting Notes [Boyd, Diamond] [9/26/16]
+      </a>
+    </h1>
+    <span class="post-date">26 Sep 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#meetings" class="tag">meetings</a>]
+	
+	  [<a href="/tags#boyd" class="tag">boyd</a>]
+	
+	  [<a href="/tags#diamond" class="tag">diamond</a>]
+	
+	</div>
+	<p>Sept 26 2016
+Boyd
+Diamond
+Agrawal</p>
+
+<p>Investigating alternate methods of solving LPs and SOCPs.</p>
+
+<ul>
+  <li>Cutting plane methods</li>
+  <li>Proximal methods</li>
+  <li>An analog of conjugate gradients?</li>
+  <li>AA^T to solve linear system, A = 10 rows by 10 Million Columns</li>
+  <li>Alternating projections while retaining inequalities (affine and conic subspace)</li>
+  <li>Alternating projections while retaining a limited number of inequalities or sketching the inequalities</li>
+  <li>Alternating projections or some other algorithm that solves a series of QCQPs to solve an SOCP (project onto a polyhedron, or onto a convex hull of inequalities)</li>
+  <li>The catchmark algorithm applied to SOCPs</li>
+  <li>A randomized approach to solving or approximating LPs or QCQPs</li>
+  <li><script type="math/tex">Ax = b, a_jx = b_j</script> (random <script type="math/tex">j</script>), project <script type="math/tex">x_k</script> onto that hyperplane to get <script type="math/tex">x_{k+1}</script></li>
+</ul>
+
+<p>LBFGS
+catchmark (?)</p>
+
+<p>conditional gradient programs</p>
+
+<p>Pontus</p>
+
+<p>non-expansive operator and fixed points</p>
+
+<p>2nd order methods are metric invariant
+first order methods have variable metrics (must find the right metric – norm should probably make subspaces round ish)</p>
+
+<p>second order cone – diag plus rank 1</p>
+
+<p>question: log-barrier and self-concordance?</p>
+
+<p>Theme: Resurrecting methods from the 50’s and applying them to solving SOCPs or LPs in order to (1) better understand the power of these methods and (2) better understand the hard-ness of these optimizing these types of programs.</p>
+
+<p>NB: A wide body of research into SOCPs has already been conducted.<br />
+Personal interest: I am interested in problems in which trade-offs must be made. In particular, I am currently interested in the trade-off between correctness and computational feasibility, as measured in time and/or space.</p>
+
+
+	
+  </div>
+  
+</div>
+
+<div class="pagination">
+  
+    <span class="pagination-item older">Older</span>
+  
+  
+    
+      <a class="pagination-item newer" href="/page4">Newer</a>
+    
+  
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

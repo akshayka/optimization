@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Projections [Foundations] &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Projections [Foundations]</h1>
+  <span class="post-date">12 Oct 2016</span>
+  <div class="tags">
+    
+      [<a href="/tags#foundations" class="tag">foundations</a>]
+    
+      [<a href="/tags#projections" class="tag">projections</a>]
+    
+      [<a href="/tags#linear-algebra" class="tag">linear-algebra</a>]
+    
+  </div>
+  <br/>
+  <p><script type="math/tex">\newcommand{\dist}{\textbf{dist}}</script>From [BV04]</p>
+
+<script type="math/tex; mode=display">\dist(x_0, C) = \text{inf}\{||x_0 - x|| | x \in C\},</script>
+
+<p><script type="math/tex">x_0 \in \mathbb{R}^n</script>, <script type="math/tex">C</script> a closed subset of <script type="math/tex">\mathbb{R}^n</script>,
+<script type="math/tex">|| \cdot ||</script> a norm.</p>
+
+<p><strong>Definition.</strong> The <strong>projection</strong> of <script type="math/tex">x_0</script> is the point <script type="math/tex">z \in C</script>
+such that</p>
+
+<script type="math/tex; mode=display">||z - x_0|| = \dist(x_0, C).</script>
+
+<p>For closed and convex <script type="math/tex">C</script> and a strictly convex norm (for example, the
+Euclidean norm), the projection of a point onto <script type="math/tex">C</script> is unique.</p>
+
+<p>The <strong>projection on <script type="math/tex">C</script></strong> <script type="math/tex">P_C</script> is defined as</p>
+
+<script type="math/tex; mode=display">P_C(x_0) = \text{arg min}\{||x_0 - x|| | x \in C\}.</script>
+
+<p>More generally, a projection is a linear transformation <script type="math/tex">P</script> from a vector
+space <script type="math/tex">V</script> to itself such that <script type="math/tex">P^2 = P</script>. We call such transformations
+<strong>idempotent</strong>. <script type="math/tex">P</script> can be characterized by the following properties:</p>
+<ol>
+  <li><script type="math/tex">P</script> is idempotent.</li>
+  <li><script type="math/tex">P</script> is the identity operator <script type="math/tex">I</script> on <script type="math/tex">\operatorname{Im} P</script>.</li>
+  <li><script type="math/tex">V = \operatorname{Im} P \oplus \operatorname{Ker} P</script>. To see this, take
+<script type="math/tex">v \in V</script> and write it as <script type="math/tex">v = u + w</script>, <script type="math/tex">u = Px</script> and <script type="math/tex">w = x - Px = (I - P)x</script>.
+Then <script type="math/tex">u \in \operatorname{Im} P</script> and <script type="math/tex">w \in \operatorname{Ker} P</script>.</li>
+</ol>
+
+<p>A projection is <strong>orthogonal</strong> if its image and kernel are orthogonal
+subspaces <a href="/texts/Linear Algebra Done Right.pdf">Linear Algebra Done Right</a> for a good treatment).
+More concretely, if <script type="math/tex">(e_1, \ldots, e_m)</script> is an orthonormal basis of <script type="math/tex">U</script>,
+then for <script type="math/tex">v \in V</script></p>
+
+<script type="math/tex; mode=display">P_{U}(v) = \langle v, e_1 \rangle e_1 + \ldots + \langle v, e_m \rangle e_m</script>
+
+<p>To see why, observe that if <script type="math/tex">v = a_1e_1 + \ldots a_me_m</script>, then we can
+take the inner product of both sides with  <script type="math/tex">e_j</script> to get that
+<script type="math/tex">a_j = \langle v, e_j</script>. We say that <script type="math/tex">\langle v, e_j</script> is the <em>coordinate</em> of
+<script type="math/tex">v</script> in the direction <script type="math/tex">e_j</script>. The above equation implies that</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+P = \begin{bmatrix}
+\vert & \vert & \ldots & \vert \\
+e_1 & e_2 & \ldots & e_m \\
+\vert & \vert & \ldots & \vert \\
+\end{bmatrix}. %]]></script>
+
+<p>An important property of orthogonal projections is that <script type="math/tex">P^T = P</script>. One way to
+see this is as follows. Let <script type="math/tex">x = x_1 + x_2</script>, <script type="math/tex">y = y_1 + y_2</script>, <script type="math/tex">x_1, x_2</script>
+orthogonal, <script type="math/tex">y_1, y_2</script> orthogonal, <script type="math/tex">Px = x_1, Py = y_1</script>. Then</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\langle x, Py \rangle &= \langle x_1 + x_2, Py \rangle \\
+&= \langle Px + x_2, Py \rangle  \\
+&= \langle Px, Py \rangle \\
+&= \langle Px, Py + y_2 \rangle \\
+&= \langle Px, y\rangle \\
+&= \langle x, P^Ty\rangle
+\end{align*} %]]></script>
+
+<p>A property of orthogonal projections that is useful for
+optimization is that they are <strong>bounded operators</strong>:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+||Pv||^2 &= \langle Pv, Pv \rangle = \langle Pv, v \rangle \leq ||Pv|| \cdot ||v|| \\
+\implies ||Pv|| &\leq ||v||
+\end{align} %]]></script>
+
+<p>In convex optimization parlance, we call bounded operators <strong>non-expansive
+operators</strong>.</p>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/12/07/ap-first-results/">
+            First results for alternating projection acceleration
+            <small>07 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/visual-checklist/">
+            Checklist
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/qp-alt-proj/">
+            Literature Review: QP + Alternating Projections
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Professor Boyd [10/24/2016] &middot; Convex Optimization
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Professor Boyd [10/24/2016]</h1>
+  <span class="post-date">24 Oct 2016</span>
+  <div class="tags">
+    
+      [<a href="/tags#boyd" class="tag">boyd</a>]
+    
+      [<a href="/tags#QP" class="tag">QP</a>]
+    
+      [<a href="/tags#alternating-projections" class="tag">alternating-projections</a>]
+    
+      [<a href="/tags#projections" class="tag">projections</a>]
+    
+      [<a href="/tags#acceleration" class="tag">acceleration</a>]
+    
+  </div>
+  <br/>
+  <h2 id="notes-from-the-meeting">Notes from the meeting</h2>
+<p>Goal: See if <em>projection methods</em> can be accelerated by more intelligent
+selection of the iterates. In particular, make more use of the information
+that we collect along the way during projection: supporting hyperplanes and
+their associated halfspaces, and sequences of iterates upon which to do a
+line search.</p>
+
+<h3 id="projecting-onto-an-affine-set-and-a-convex-cone-is-general">Projecting onto an affine set and a convex cone is general</h3>
+<p>Consider starting with an <em>affine set and a convex cone</em>. This is the most
+general setting – it generalizes to any intersection of cones. To see this,
+say that we wanted to project a vector <script type="math/tex">x</script> onto <script type="math/tex">C = C_1 \cap C_2 \cap \ldots \cap C_r</script>,
+each <script type="math/tex">C_i \in \mathbb{R}^n</script>. Form</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\tilde{C} &= C_1 \times C_2 \times \ldots \times C_r \\
+\tilde{A} &= \{z \mid z_1 = z_2 = \ldots = z_r \}, & z = [z_1, z_2, \ldots, z_r]^T
+\end{align*} %]]></script>
+
+<p>Finding a point in <script type="math/tex">\underset{i}\cap C_i</script> is equivalent to finding a point
+in <script type="math/tex">\tilde{C} \cap \tilde{A}</script>. Note that <script type="math/tex">\tilde{C}</script> is a convex cone and
+that <script type="math/tex">\tilde{A}</script> is an affine set. To project onto <script type="math/tex">\tilde{A}</script> from
+<script type="math/tex">\tilde{C}</script>, we just take the average of each block <script type="math/tex">x_i</script>.</p>
+
+<script type="math/tex; mode=display">\begin{bmatrix}
+x_1 \\
+x_2 \\
+\ldots \\
+x_r
+\end{bmatrix} \xrightarrow{\mathcal{P}} C_1 \times C_2 \times \ldots \times C_r \xrightarrow[\text{ average }]{\mathcal{P}} A</script>
+
+<h3 id="projections-can-be-cheap-even-for-extremely-high-dimensional-data">Projections can be cheap, even for extremely high dimensional data</h3>
+<p>Say we have some variable <script type="math/tex">x \in \mathbb{R}^{10^7}</script> and a fixed <script type="math/tex">z</script> in the same
+space, and say we want <script type="math/tex">x</script> to be the projection of <script type="math/tex">z</script> onto a polyhedron.
+Provided that the polyhedron is defined by a small number of halfpsaces, we can
+compute this projection extremely cheaply. To be more concrete, our optimization
+problem is of the form</p>
+
+<script type="math/tex; mode=display">\optmin{x}{\frac{1}{2}\pnorm{x - z}{2}^2}{Fx \leq g},</script>
+
+<p>where <script type="math/tex">F \in \mathbb{R}^{10 \times 10^7}</script>. That is, <script type="math/tex">F</script> is short and fat. The
+fact that <script type="math/tex">F</script> is short is precisely what will let us compute the projection
+of <script type="math/tex">z</script> onto the polyhedron efficiently.</p>
+
+<p>The Lagrangian of the above problem is</p>
+
+<script type="math/tex; mode=display">\mathcal{L}(x, \gamma) = \frac{1}{2}\pnorm{x - z}{2}^2 + \gamma^T(Fx - g),
+\quad \gamma \in \mathbb{R}^{10}.</script>
+
+<p>Minimizing it in the normal way, we have</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+&& \nabla_x \mathcal{L}(x, \gamma) &= 0 \\
+&\iff & x - z + F^T\gamma &= 0 \\
+&\iff & x &= z - F^T\gamma
+\end{align*} %]]></script>
+
+<p>Substituting <script type="math/tex">x = z - F^T\gamma</script> into our objective function eliminates both
+<script type="math/tex">z</script> and <script type="math/tex">x</script>:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\pnorm{z - F^T\gamma - z}{2}^2 &= \pnorm{F^T\gamma}{2}^2 \\
+&= (\gamma^T F^T)^T(F^T\gamma) \\
+&= \gamma^T FF^T \gamma. \\
+\end{align*} %]]></script>
+
+<p>Note that <script type="math/tex">FF^T \in \mathbb{R}^{10 \times 10}</script>! Our minimization problem has
+become</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\optmin{\gamma}{\frac{1}{2}\gamma^T FF^T \gamma}{Fz -  FF^T\gamma \leq g, \\ &&& \gamma \geq 0.} %]]></script>
+
+<p>We can solve the problem easily after paying the overhead to compute <script type="math/tex">Fz</script>
+and <script type="math/tex">FF^T</script>.</p>
+
+<h3 id="generating-a-large-random-cone-program">Generating a large, random cone program.</h3>
+<p>Recall the KKT conditions for the problem in SCS.</p>
+
+<p>Randomly generate <script type="math/tex">z \in_{\mathcal{R}} \mathbb{R}^n</script>. Generate <script type="math/tex">x = \Pi_C(z)</script>.
+Then generate <script type="math/tex">s = z - \Pi(z) = \Pi_{C^*}(z)</script>. We will have <script type="math/tex">x^Ts = 0, x \in C,
+s \in C^{*}</script>. From there, enough will be specified to generate the data matrix
+<script type="math/tex">A</script> and the vector <script type="math/tex">b</script>. What’s more, you’ll have the solution <script type="math/tex">x</script>, too.</p>
+
+<h3 id="canonical-sources-and-algorithms-to-read-up-on">Canonical sources and algorithms to read up on</h3>
+<ol>
+  <li><a href="/papers/ON PROJECTION ALGORITHMS FOR SOLVING CONVEX FEASIBILITY PROBLEMS.pdf">Borwein’s survey on alternating projections</a></li>
+  <li><a href="/papers/HeavyBallLinear.pdf">On the heavy ball method and momentum</a></li>
+  <li>“FCM Method,” from the 364B notes? Something about cutting planes with
+memory=2. I couldn’t find it.</li>
+</ol>
+
+<h3 id="ideas-on-accelerating-alternating-projections">Ideas on accelerating alternating projections</h3>
+<ol>
+  <li>Dumbest, simplest idea (that just might work well enough): project onto
+the intersection of the supporting halfspaces to form a new iterate.</li>
+  <li>Somewhat smarter: Keep more than 2 halfspaces. (Will this help? Certainly
+not in <script type="math/tex">\mathbb{R}^2.</script>)</li>
+  <li>Somewhat smarter still: Project onto more the halfspaces, but also do a
+line/plane search of the previous <script type="math/tex">k</script> iterates, <script type="math/tex">k</script> a parameter.</li>
+</ol>
+
+<p>Suggestion (2):</p>
+<ul>
+  <li>Say we let <script type="math/tex">\tilde{F}</script> be the supporting hyperplanes we collect for
+ the convex cone.</li>
+  <li>And let <script type="math/tex">F</script> be a 0-1 diagonal matrix that whose <script type="math/tex">i</script>-th diagonal entry
+is 1 if and only if we’re picking up the <script type="math/tex">i</script>-th equality constraint.</li>
+  <li>Then, at each step, we’re solving</li>
+</ul>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\optmin{x}{\pnorm{x - z}{2}^2}{ FAx = b, \\ &&& \tilde{F}x \leq \tilde{b} } %]]></script>
+
+<p>Key question: Can we solve this efficiently? Will the trick above help?
+Will FA become bigger than A? (No.)</p>
+
+<p>Suggestion (3):</p>
+
+<script type="math/tex; mode=display">\optmin{\theta}{\dist{\sum_{i} \theta_i a_i}{\mathcal{C}}^2}{\sum_{i} \theta_i = 1,}</script>
+
+<p><script type="math/tex">a_i</script> are a finite number of previous iterates that were on the affine set. That is, we’re doing a
+plane search. Can we solve this cheaply? We don’t have to solve it exactly, just
+need to do better than projecting the last of the iterates (the most recent one) onto
+<script type="math/tex">\mathcal{C}</script>, because that’s what we do by default.
+We’re assuming we know how to project onto <script type="math/tex">\mathcal{C}</script>.
+Is the objective function differentiable? Does the cost still go down if we
+do this? Do this, then do the cutting plane strategy, then project onto affine?</p>
+
+<p>Boyd was under the impression / had the feeling that if we did three “weird” things,
+things might just work out well. One or two might not suffice, however.</p>
+
+<h3 id="papers-to-bring-up">Papers to bring up:</h3>
+<ol>
+  <li><a href="/papers/SET INTERSECTION PROBLEMS- SUPPORTING HYPERPLANES AND QUADRATIC PROGRAMMING.pdf">Set Intersection Problems: Supporting Hyperplanes &amp; Quadratic Programming</a>
+    <ul>
+      <li>Upshot: superlinear convergence in certain cases</li>
+      <li>Work to be done: Numerical validations on real test suite</li>
+    </ul>
+  </li>
+  <li>SuperMann: Special case –&gt; find point in intersection of (convex) sets</li>
+</ol>
+
+<h3 id="approaches-to-discuss-for-accelerating-alternating-projections">Approaches to discuss for accelerating alternating projections:</h3>
+<ol>
+  <li>Solve QP + over-project? (Note that projecting onto the intersection of
+two halfspaces is a simple cone projection problem.)</li>
+  <li>What if we just initialize our new iterate at the intersection of the
+two halfspaces (when finding the intersection of two sets)?</li>
+  <li>Randomness (Mert Pilanci’s work) (choose which halfspaces to use uniformly
+at random?)</li>
+</ol>
+
+<h3 id="questions">Questions:</h3>
+<ol>
+  <li>Canonical sources?</li>
+</ol>
+
+<h3 id="action-items">Action items:</h3>
+<ol>
+  <li>Hooked into / clone the test suite (Mark N…?)</li>
+  <li>Implement vs. theoretical guarantees – what’s the best way to go about
+getting a feel for how “good” an algorithm is? A bit of both simultaneously?
+    <ul>
+      <li>prove convergence at the very least …?</li>
+    </ul>
+  </li>
+</ol>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/12/07/ap-first-results/">
+            First results for alternating projection acceleration
+            <small>07 Dec 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/visual-checklist/">
+            Checklist
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/09/qp-alt-proj/">
+            Literature Review: QP + Alternating Projections
+            <small>09 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

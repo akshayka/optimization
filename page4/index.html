@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Convex Optimization &middot; Research Notebook
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- Latex Macros -->
+  <p hidden>
+  $$
+  \newcommand{\argmin}[2]{\underset{#1}{\operatorname{argmin}} {#2}}
+  \newcommand{\dist}[2]{\operatorname{dist}(#1, #2)}
+  \newcommand{\fix}[1]{\operatorname{Fix}#1}
+  \newcommand{\pnorm}[2]{\left\lVert{#1}\right\rVert_{#2}}
+  \newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+  \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}
+  \newcommand{\optmin}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{minimize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optmax}[3]{
+	\begin{align*}
+	& \underset{#1}{\text{maximize}} & & #2 \\
+	& \text{subject to} & & #3
+	\end{align*}
+  }
+  \newcommand{\optfind}[2]{
+	\begin{align*}
+	& {\text{find}} & & #1 \\
+	& \text{subject to} & & #2
+	\end{align*}
+  }
+  $$
+  </p>
+
+
+</head>
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		"HTML-CSS": { availableFonts: ["TeX"] },
+		 TeX: { equationNumbers: { autoNumber: "AMS" } },
+	  });
+	</script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>By Akshay Agrawal. Commenced Oct. 5, 2016. Advised by Stephen Boyd.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Convex Optimization</a>
+            <small>Research Notebook</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/12/projections/">
+        Projections [Foundations]
+      </a>
+    </h1>
+    <span class="post-date">12 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#foundations" class="tag">foundations</a>]
+	
+	  [<a href="/tags#projections" class="tag">projections</a>]
+	
+	  [<a href="/tags#linear-algebra" class="tag">linear-algebra</a>]
+	
+	</div>
+	<p><script type="math/tex">\newcommand{\dist}{\textbf{dist}}</script>From [BV04]</p>
+
+<script type="math/tex; mode=display">\dist(x_0, C) = \text{inf}\{||x_0 - x|| | x \in C\},</script>
+
+<p><script type="math/tex">x_0 \in \mathbb{R}^n</script>, <script type="math/tex">C</script> a closed subset of <script type="math/tex">\mathbb{R}^n</script>,
+<script type="math/tex">|| \cdot ||</script> a norm.</p>
+
+<p><strong>Definition.</strong> The <strong>projection</strong> of <script type="math/tex">x_0</script> is the point <script type="math/tex">z \in C</script>
+such that</p>
+
+<script type="math/tex; mode=display">||z - x_0|| = \dist(x_0, C).</script>
+
+<p>For closed and convex <script type="math/tex">C</script> and a strictly convex norm (for example, the
+Euclidean norm), the projection of a point onto <script type="math/tex">C</script> is unique.</p>
+
+<p>The <strong>projection on <script type="math/tex">C</script></strong> <script type="math/tex">P_C</script> is defined as</p>
+
+<script type="math/tex; mode=display">P_C(x_0) = \text{arg min}\{||x_0 - x|| | x \in C\}.</script>
+
+<p>More generally, a projection is a linear transformation <script type="math/tex">P</script> from a vector
+space <script type="math/tex">V</script> to itself such that <script type="math/tex">P^2 = P</script>. We call such transformations
+<strong>idempotent</strong>. <script type="math/tex">P</script> can be characterized by the following properties:</p>
+<ol>
+  <li><script type="math/tex">P</script> is idempotent.</li>
+  <li><script type="math/tex">P</script> is the identity operator <script type="math/tex">I</script> on <script type="math/tex">\operatorname{Im} P</script>.</li>
+  <li><script type="math/tex">V = \operatorname{Im} P \oplus \operatorname{Ker} P</script>. To see this, take
+<script type="math/tex">v \in V</script> and write it as <script type="math/tex">v = u + w</script>, <script type="math/tex">u = Px</script> and <script type="math/tex">w = x - Px = (I - P)x</script>.
+Then <script type="math/tex">u \in \operatorname{Im} P</script> and <script type="math/tex">w \in \operatorname{Ker} P</script>.</li>
+</ol>
+
+<p>A projection is <strong>orthogonal</strong> if its image and kernel are orthogonal
+subspaces <a href="/texts/Linear Algebra Done Right.pdf">Linear Algebra Done Right</a> for a good treatment).
+More concretely, if <script type="math/tex">(e_1, \ldots, e_m)</script> is an orthonormal basis of <script type="math/tex">U</script>,
+then for <script type="math/tex">v \in V</script></p>
+
+<script type="math/tex; mode=display">P_{U}(v) = \langle v, e_1 \rangle e_1 + \ldots + \langle v, e_m \rangle e_m</script>
+
+<p>To see why, observe that if <script type="math/tex">v = a_1e_1 + \ldots a_me_m</script>, then we can
+take the inner product of both sides with  <script type="math/tex">e_j</script> to get that
+<script type="math/tex">a_j = \langle v, e_j</script>. We say that <script type="math/tex">\langle v, e_j</script> is the <em>coordinate</em> of
+<script type="math/tex">v</script> in the direction <script type="math/tex">e_j</script>. The above equation implies that</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+P = \begin{bmatrix}
+\vert & \vert & \ldots & \vert \\
+e_1 & e_2 & \ldots & e_m \\
+\vert & \vert & \ldots & \vert \\
+\end{bmatrix}. %]]></script>
+
+<p>An important property of orthogonal projections is that <script type="math/tex">P^T = P</script>. One way to
+see this is as follows. Let <script type="math/tex">x = x_1 + x_2</script>, <script type="math/tex">y = y_1 + y_2</script>, <script type="math/tex">x_1, x_2</script>
+orthogonal, <script type="math/tex">y_1, y_2</script> orthogonal, <script type="math/tex">Px = x_1, Py = y_1</script>. Then</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\langle x, Py \rangle &= \langle x_1 + x_2, Py \rangle \\
+&= \langle Px + x_2, Py \rangle  \\
+&= \langle Px, Py \rangle \\
+&= \langle Px, Py + y_2 \rangle \\
+&= \langle Px, y\rangle \\
+&= \langle x, P^Ty\rangle
+\end{align*} %]]></script>
+
+<p>A property of orthogonal projections that is useful for
+optimization is that they are <strong>bounded operators</strong>:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+||Pv||^2 &= \langle Pv, Pv \rangle = \langle Pv, v \rangle \leq ||Pv|| \cdot ||v|| \\
+\implies ||Pv|| &\leq ||v||
+\end{align} %]]></script>
+
+<p>In convex optimization parlance, we call bounded operators <strong>non-expansive
+operators</strong>.</p>
+
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/12/364b-lecture-notes/">
+        Skimming 364b lecture notes
+      </a>
+    </h1>
+    <span class="post-date">12 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#ee364b" class="tag">ee364b</a>]
+	
+	  [<a href="/tags#survey" class="tag">survey</a>]
+	
+	</div>
+	<script type="math/tex; mode=display">\newcommand{\dist}{\textbf{dist}}</script>
+
+<h2 id="subgradient-methodslecturenotessubgradmethodnotespdf"><a href="/lecture_notes/subgrad_method_notes.pdf">Subgradient Methods</a></h2>
+<p><strong>Polykak’s step length</strong> is a neat way of choosing an ‘optimal’ step size for
+<a href="/lecture_notes/subgrad_method_notes.pdf">subgradient methods</a>.
+The step size is</p>
+
+<script type="math/tex; mode=display">\alpha_k = \frac{
+              f(x^{(k)}) - (f_{\text{best}} - \gamma^k)}
+              {||g^{(k)}||_2^2},</script>
+
+<p>which can be motivated by looking at the key inequality used when analyzing
+the convergence of subgradient methods.</p>
+
+<p>A cool result: <strong>alternating projections</strong>, the algorithm for finding a point
+in the intersection of convex sets, falls out of using the subgradient method
+with Polyak’s step length (!!). The objective function for this problem is</p>
+
+<script type="math/tex; mode=display">f(x) = \max\{\dist(x, C_1), \ldots, \dist(x, C_m)\}.</script>
+
+<p>Noting that <script type="math/tex">f^* = 0</script>, we can derive that <script type="math/tex">x^{k+1} = \Pi_{C_j}[x^{(k)}]</script>,
+where <script type="math/tex">C_j</script> is the farthest set from the current point and <script type="math/tex">\Pi_C</script> is the
+Euclidean projection onto <script type="math/tex">C</script>.</p>
+
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/07/optimization-methods-bertsekas/">
+        Convex Optimization Algorithms, Berteskas [2009 Supplement]
+      </a>
+    </h1>
+    <span class="post-date">07 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#Bertsekas" class="tag">Bertsekas</a>]
+	
+	  [<a href="/tags#survey" class="tag">survey</a>]
+	
+	</div>
+	<p><a href="/texts/Convex-Optimization-Algorithms-Supplement.pdf">Convex Optimization Algorithms</a></p>
+
+<p>Most algorithms for minimizing convex <script type="math/tex">f</script> over a convex set <script type="math/tex">X</script> make use
+of at least one of the following techniques:</p>
+<ol>
+  <li><strong>Iterative descent</strong>. The sequence <script type="math/tex">\{x_k\} \subset X</script> is such that
+<script type="math/tex">\{\phi(x_k)\}</script> is a decreasing sequence.</li>
+  <li><strong>Approximation</strong>, where <script type="math/tex">\{x_k\}</script> is obtained by solving at each step
+<script type="math/tex">k</script> a tractable approximation of the original optimization problem. The
+approximation should improve at each step <script type="math/tex">k</script>.</li>
+</ol>
+
+<p>This post covers …</p>
+<ul>
+  <li>gradient descent methods</li>
+  <li>subgradient methods</li>
+  <li>polyhedral approximation methods</li>
+  <li>proximal and bundle methods</li>
+  <li>interior-point methods</li>
+  <li>primal-dual methods</li>
+  <li>approximate subgradient methods</li>
+</ul>
+
+
+	
+		<a href="/2016/10/07/optimization-methods-bertsekas/">Read more</a>
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/07/cvxflow/">
+        Paper: cvxflow [Wytock]
+      </a>
+    </h1>
+    <span class="post-date">07 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#paper" class="tag">paper</a>]
+	
+	  [<a href="/tags#cvxflow" class="tag">cvxflow</a>]
+	
+	  [<a href="/tags#wytock" class="tag">wytock</a>]
+	
+	</div>
+	<p><a href="../papers/cvxflow.pdf">A New Architecture for Modern Convex Optimization</a></p>
+
+<h3 id="key-contribution">Key Contribution</h3>
+<ul>
+  <li>A framework for expressing optimization problems as computation graphs.</li>
+  <li>This framework allows for better scalability and parallelization</li>
+  <li>Graph = composition of linear operators</li>
+  <li>Can implement on top of TensorFlow</li>
+</ul>
+
+<h3 id="motivation">Motivation</h3>
+<ul>
+  <li>Existing solvers and modeling frameworks do not support GPUs, distributed
+computation
+    <ul>
+      <li>problem #1: interior point methods are compute bound</li>
+      <li>problem #2: interior point methods are network bound</li>
+    </ul>
+  </li>
+  <li>Want scalability for massive optimization problems</li>
+</ul>
+
+<h3 id="future-work">Future Work</h3>
+<ul>
+  <li>How well do first-order methods scale on cvxflow?</li>
+</ul>
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/06/interior-vs-first-order/">
+        Interior Point v. First Order Methods
+      </a>
+    </h1>
+    <span class="post-date">06 Oct 2016</span>
+	<div class="post-date">
+	
+	  [<a href="/tags#interior-point-methods" class="tag">interior-point-methods</a>]
+	
+	  [<a href="/tags#first-order-methods" class="tag">first-order-methods</a>]
+	
+	</div>
+	<p>Interior point methods are <em>robust</em> to ill-conditioned data and converge
+quickly in the number of iterations. However, they exhibit roughly <script type="math/tex">O(n^2)</script>
+or <script type="math/tex">O(n^3)</script> runtime, <script type="math/tex">n</script> the number of variables <span class="todo">
+(check) </span> and do not scale out well. The lack of scaling is due largely
+to two reasons: the quadratic/cubic runtime and the communication overhead
+incurred when computing the Hessian / performing the matrix multiplication.</p>
+
+<p>First-order methods exhibit good <em>scaling</em> but they are not necessary robust.
+They are also somewhat suboptimal in the sense that they are restricted to
+local information, whereas interior point methods use global information</p>
+
+<p>A goal is to find a happy medium between the two.</p>
+
+<p>source: <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwj23ODUlMjPAhWFKWMKHZgXBWAQFgghMAA&amp;url=http%3A%2F%2Fwww2.isye.gatech.edu%2F~nemirovs%2FLect_ModConvOpt.pdf&amp;usg=AFQjCNEVuAHbqT6eDYpmldVz-gBqsBe6tA&amp;sig2=vtEiWGCK1BaDqjJtN1zq1g&amp;bvm=bv.134495766,d.cGc">lectures on modern convex optimization</a></p>
+
+
+	
+  </div>
+  
+</div>
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/page5">Older</a>
+  
+  
+    
+      <a class="pagination-item newer" href="/page3">Newer</a>
+    
+  
+</div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

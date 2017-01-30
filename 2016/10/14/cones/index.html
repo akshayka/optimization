@@ -15,17 +15,17 @@
   </title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/public/css/poole.css">
-  <link rel="stylesheet" href="/public/css/syntax.css">
-  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/optimization/public/css/poole.css">
+  <link rel="stylesheet" href="/optimization/public/css/syntax.css">
+  <link rel="stylesheet" href="/optimization/public/css/lanyon.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
 
   <!-- Icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
-  <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/optimization/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/optimization/public/favicon.ico">
 
   <!-- RSS -->
-  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/optimization/atom.xml">
 
   <!-- Latex Macros -->
   <p hidden>
@@ -84,7 +84,7 @@
   </div>
 
   <nav class="sidebar-nav">
-    <a class="sidebar-nav-item" href="/">Home</a>
+    <a class="sidebar-nav-item" href="/optimization/">Home</a>
 
     
 
@@ -96,7 +96,7 @@
     
       
         
-          <a class="sidebar-nav-item" href="/about/">About</a>
+          <a class="sidebar-nav-item" href="/optimization/about/">About</a>
         
       
     
@@ -104,7 +104,7 @@
     
       
         
-          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+          <a class="sidebar-nav-item" href="/optimization/daily-sketch/">Daily Sketch</a>
         
       
     
@@ -112,19 +112,19 @@
     
       
         
-          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+          <a class="sidebar-nav-item" href="/optimization/lecture-notes/">Lecture Notes</a>
         
       
     
       
         
-          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+          <a class="sidebar-nav-item" href="/optimization/papers/">Papers</a>
         
       
     
       
         
-          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+          <a class="sidebar-nav-item" href="/optimization/tags/">Tags</a>
         
       
     
@@ -156,7 +156,7 @@
           <label for="sidebar-checkbox" class="sidebar-toggle"></label>
 
           <h3 class="masthead-title">
-            <a href="/" title="Home">Convex Optimization</a>
+            <a href="/optimization/" title="Home">Convex Optimization</a>
             <small>Research Notebook</small>
           </h3>
         </div>
@@ -168,14 +168,14 @@
   <span class="post-date">14 Oct 2016</span>
   <div class="tags">
     
-      [<a href="/tags#foundations" class="tag">foundations</a>]
+      [<a href="/optimization/tags#foundations" class="tag">foundations</a>]
     
-      [<a href="/tags#cones" class="tag">cones</a>]
+      [<a href="/optimization/tags#cones" class="tag">cones</a>]
     
   </div>
   <br/>
   <p><strong>Definition.</strong> A <strong>cone</strong> is a set <script type="math/tex">K</script> such that <script type="math/tex">x \in K
-\implies \theta x \in K, \; \forall \theta \geq 0</script> <a href="/texts/Convex Optimization [Boyd].pdf">[BV04]</a></p>
+\implies \theta x \in K, \; \forall \theta \geq 0</script> <a href="/optimization/texts/Convex Optimization [Boyd].pdf">[BV04]</a></p>
 
 <p><strong>Definition.</strong> A <strong>convex cone</strong> is a cone that is also convex:
 <script type="math/tex">\theta x + (1 - \theta) y \in K</script> if <script type="math/tex">x, y \in K</script> and <script type="math/tex">\theta \geq 0</script>.</p>
@@ -185,7 +185,7 @@
 <p>Why do we care about cones?</p>
 
 <p>Cones are “among the simplest convex sets” – think of them as the analog of
-subspaces in linear analysis for convex analysis <a href="/texts/Convex Analysis and Minimization Algorithms I.pdf">[HU91]</a>. Note that
+subspaces in linear analysis for convex analysis <a href="/optimization/texts/Convex Analysis and Minimization Algorithms I.pdf">[HU91]</a>. Note that
 a subspace is a convex cone, but a convex cone is not necessarily a subspace.
 Indeed, the only thing that prevents a convex cone from being a subspace is
 symmetry (it is not necessarily the case that <script type="math/tex">K = -K</script>).</p>

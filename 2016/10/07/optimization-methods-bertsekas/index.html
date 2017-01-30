@@ -15,17 +15,17 @@
   </title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/public/css/poole.css">
-  <link rel="stylesheet" href="/public/css/syntax.css">
-  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/optimization/public/css/poole.css">
+  <link rel="stylesheet" href="/optimization/public/css/syntax.css">
+  <link rel="stylesheet" href="/optimization/public/css/lanyon.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
 
   <!-- Icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
-  <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/optimization/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/optimization/public/favicon.ico">
 
   <!-- RSS -->
-  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/optimization/atom.xml">
 
   <!-- Latex Macros -->
   <p hidden>
@@ -84,7 +84,7 @@
   </div>
 
   <nav class="sidebar-nav">
-    <a class="sidebar-nav-item" href="/">Home</a>
+    <a class="sidebar-nav-item" href="/optimization/">Home</a>
 
     
 
@@ -96,7 +96,7 @@
     
       
         
-          <a class="sidebar-nav-item" href="/about/">About</a>
+          <a class="sidebar-nav-item" href="/optimization/about/">About</a>
         
       
     
@@ -104,7 +104,7 @@
     
       
         
-          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+          <a class="sidebar-nav-item" href="/optimization/daily-sketch/">Daily Sketch</a>
         
       
     
@@ -112,19 +112,19 @@
     
       
         
-          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+          <a class="sidebar-nav-item" href="/optimization/lecture-notes/">Lecture Notes</a>
         
       
     
       
         
-          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+          <a class="sidebar-nav-item" href="/optimization/papers/">Papers</a>
         
       
     
       
         
-          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+          <a class="sidebar-nav-item" href="/optimization/tags/">Tags</a>
         
       
     
@@ -156,7 +156,7 @@
           <label for="sidebar-checkbox" class="sidebar-toggle"></label>
 
           <h3 class="masthead-title">
-            <a href="/" title="Home">Convex Optimization</a>
+            <a href="/optimization/" title="Home">Convex Optimization</a>
             <small>Research Notebook</small>
           </h3>
         </div>
@@ -168,13 +168,13 @@
   <span class="post-date">07 Oct 2016</span>
   <div class="tags">
     
-      [<a href="/tags#Bertsekas" class="tag">Bertsekas</a>]
+      [<a href="/optimization/tags#Bertsekas" class="tag">Bertsekas</a>]
     
-      [<a href="/tags#survey" class="tag">survey</a>]
+      [<a href="/optimization/tags#survey" class="tag">survey</a>]
     
   </div>
   <br/>
-  <p><a href="/texts/Convex-Optimization-Algorithms-Supplement.pdf">Convex Optimization Algorithms</a></p>
+  <p><a href="/optimization/texts/Convex-Optimization-Algorithms-Supplement.pdf">Convex Optimization Algorithms</a></p>
 
 <p>Most algorithms for minimizing convex <script type="math/tex">f</script> over a convex set <script type="math/tex">X</script> make use
 of at least one of the following techniques:</p>
@@ -293,7 +293,7 @@ S_k = \{(x, w) \mid x \in X, F_k(x) \leq w \leq \tilde{f}_k\}
 <p>where <script type="math/tex">\tilde{f}_k = \min_{i \leq k} f(x_i)</script> is the best upper bound of
 the optimal value found so far.</p>
 
-<p><img src="/assets/central-cutting-plane.png" style="margin:auto" /></p>
+<p><img src="/optimization/assets/central-cutting-plane.png" style="margin:auto" /></p>
 
 <ul>
   <li>the <em>analytic center of S_k</em> is one choice for the central point.</li>
@@ -304,8 +304,8 @@ interior point methods <span class="todo">(?)</span></li>
 <p><span class="meta-text">randomized algorithms seem like they could help make
 cutting plane methods more computationally tractable. It seems like I’m not
 the first to make this observation. Bertsekas published a seminal paper about
-using <a href="/papers/Solving-Convex-Programs-by-Random-Walks.pdf">random walks for convex optimization</a>. A more
-recent paper looked at a similar problem (<a href="/papers/A-Randomized-Cutting-Plane-Method.pdf">A Randomized Cutting Plane Method</a>).
+using <a href="/optimization/papers/Solving-Convex-Programs-by-Random-Walks.pdf">random walks for convex optimization</a>. A more
+recent paper looked at a similar problem (<a href="/optimization/papers/A-Randomized-Cutting-Plane-Method.pdf">A Randomized Cutting Plane Method</a>).
 </span></p>
 
 <p><em>Inner Linearization: Simplical Decomposition</em></p>
@@ -646,7 +646,7 @@ by reducing to a sequence of linear equality constrained problems.</li>
 
 <p>The idea of a <strong>barrier</strong> is intuitive ~</p>
 
-<p><img src="/assets/log-barrier.png" style="margin:auto" /></p>
+<p><img src="/optimization/assets/log-barrier.png" style="margin:auto" /></p>
 
 <p>A point <script type="math/tex">x^*(t)</script> on the <em>central point</em> is at most <script type="math/tex">m/t</script> suboptimal, <script type="math/tex">m</script> the
 number of inequality constraints. The barrier method conveniently gives us dual feasible points along the way (see [BV04] for details).</p>

@@ -4,7 +4,7 @@
  <title>Convex Optimization</title>
  <link href="/atom.xml" rel="self"/>
  <link href="/"/>
- <updated>2017-01-29T20:20:09-08:00</updated>
+ <updated>2017-01-29T21:15:52-08:00</updated>
  <id></id>
  <author>
    <name>Akshay Agrawal</name>
@@ -199,7 +199,7 @@ happening here&lt;/p&gt;
    <link href="/2016/11/09/borwein-survey/"/>
    <updated>2016-11-09T00:00:00-08:00</updated>
    <id>/2016/11/09/borwein-survey</id>
-   <content type="html">&lt;p&gt;&lt;a href=&quot;/papers/Projection Methods and Monotone Operators.pdf&quot;&gt;Source: Bauschke’s Projection Methods and Monotone Operators&lt;/a&gt;&lt;/p&gt;
+   <content type="html">&lt;p&gt;&lt;a href=&quot;/optimization/papers/Projection Methods and Monotone Operators.pdf&quot;&gt;Source: Bauschke’s Projection Methods and Monotone Operators&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;preliminaries&quot;&gt;Preliminaries&lt;/h3&gt;
 &lt;p&gt;A mapping &lt;script type=&quot;math/tex&quot;&gt;T&lt;/script&gt; is a &lt;strong&gt;non-expansive operator&lt;/strong&gt; if it is always true that&lt;/p&gt;
@@ -437,7 +437,7 @@ way of guarding against zigzagging trajectories in iterative descent and
 alternating projection methods. (Scribed from Polyak’s book.)&lt;/p&gt;
 
 &lt;p&gt;I can’t find anything about accelerating alternating projections with the
-heavy-ball method, though Escalante’s book &lt;a href=&quot;/texts/Alternating Projection Methods.pdf&quot;&gt;&lt;em&gt;Alternating Projection Methods&lt;/em&gt;&lt;/a&gt;
+heavy-ball method, though Escalante’s book &lt;a href=&quot;/optimization/texts/Alternating Projection Methods.pdf&quot;&gt;&lt;em&gt;Alternating Projection Methods&lt;/em&gt;&lt;/a&gt;
 does describe how to perform a line search when all of the sets are
 affine (I imagine the technique extends beyond the affine case).&lt;/p&gt;
 
@@ -578,8 +578,8 @@ s \in C^{*}&lt;/script&gt;. From there, enough will be specified to generate the
 
 &lt;h3 id=&quot;canonical-sources-and-algorithms-to-read-up-on&quot;&gt;Canonical sources and algorithms to read up on&lt;/h3&gt;
 &lt;ol&gt;
-  &lt;li&gt;&lt;a href=&quot;/papers/ON PROJECTION ALGORITHMS FOR SOLVING CONVEX FEASIBILITY PROBLEMS.pdf&quot;&gt;Borwein’s survey on alternating projections&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;/papers/HeavyBallLinear.pdf&quot;&gt;On the heavy ball method and momentum&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/optimization/papers/ON PROJECTION ALGORITHMS FOR SOLVING CONVEX FEASIBILITY PROBLEMS.pdf&quot;&gt;Borwein’s survey on alternating projections&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;/optimization/papers/HeavyBallLinear.pdf&quot;&gt;On the heavy ball method and momentum&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;“FCM Method,” from the 364B notes? Something about cutting planes with
 memory=2. I couldn’t find it.&lt;/li&gt;
 &lt;/ol&gt;
@@ -626,7 +626,7 @@ things might just work out well. One or two might not suffice, however.&lt;/p&gt
 
 &lt;h3 id=&quot;papers-to-bring-up&quot;&gt;Papers to bring up:&lt;/h3&gt;
 &lt;ol&gt;
-  &lt;li&gt;&lt;a href=&quot;/papers/SET INTERSECTION PROBLEMS- SUPPORTING HYPERPLANES AND QUADRATIC PROGRAMMING.pdf&quot;&gt;Set Intersection Problems: Supporting Hyperplanes &amp;amp; Quadratic Programming&lt;/a&gt;
+  &lt;li&gt;&lt;a href=&quot;/optimization/papers/SET INTERSECTION PROBLEMS- SUPPORTING HYPERPLANES AND QUADRATIC PROGRAMMING.pdf&quot;&gt;Set Intersection Problems: Supporting Hyperplanes &amp;amp; Quadratic Programming&lt;/a&gt;
     &lt;ul&gt;
       &lt;li&gt;Upshot: superlinear convergence in certain cases&lt;/li&gt;
       &lt;li&gt;Work to be done: Numerical validations on real test suite&lt;/li&gt;
@@ -873,7 +873,7 @@ exponential, …)&lt;/li&gt;
 
 &lt;!--more--&gt;
 
-&lt;h2 id=&quot;dykstras-method-d83d83&quot;&gt;Dykstra’s Method &lt;a href=&quot;/papers/Dykstra - An Algorithm for Restricted Least Squares Regression.pdf&quot;&gt;[D83]&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;dykstras-method-d83d83&quot;&gt;Dykstra’s Method &lt;a href=&quot;/optimization/papers/Dykstra - An Algorithm for Restricted Least Squares Regression.pdf&quot;&gt;[D83]&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Goal: Find a least squares projection onto a convex set.&lt;/p&gt;
 
 &lt;h3 id=&quot;preliminaries&quot;&gt;Preliminaries&lt;/h3&gt;
@@ -888,7 +888,7 @@ alternating projections).&lt;/p&gt;
 
 &lt;h3 id=&quot;the-algorithm&quot;&gt;The Algorithm&lt;/h3&gt;
 
-&lt;p&gt;… &lt;a href=&quot;/papers/Dykstra - An Algorithm for Restricted Least Squares Regression.pdf&quot;&gt;[D83]&lt;/a&gt; is old, and the result actually holds for projecting onto
+&lt;p&gt;… &lt;a href=&quot;/optimization/papers/Dykstra - An Algorithm for Restricted Least Squares Regression.pdf&quot;&gt;[D83]&lt;/a&gt; is old, and the result actually holds for projecting onto
 the intersection of general closed convex sets (not necessarily cones). A
 natural way to think about the process is that the projections are
 “pulled back” before re-projecting. So say we are projecting onto &lt;script type=&quot;math/tex&quot;&gt;C \cap D&lt;/script&gt;,
@@ -904,7 +904,7 @@ where &lt;script type=&quot;math/tex&quot;&gt;q_1 := \tilde{y_0} - x_1&lt;/scrip
 &lt;script type=&quot;math/tex&quot;&gt;\tilde{y_0} = y_0&lt;/script&gt;. Then we take &lt;script type=&quot;math/tex&quot;&gt;x_2 = P_C(\tilde{y_1})&lt;/script&gt;, and we continue
 this process until convergence.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/dykstra_algorithm.png&quot; style=&quot;margin:auto&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/optimization/assets/dykstra_algorithm.png&quot; style=&quot;margin:auto&quot; /&gt;&lt;/p&gt;
 
 </content>
  </entry>
@@ -975,7 +975,7 @@ training.
    <updated>2016-10-14T00:00:00-07:00</updated>
    <id>/2016/10/14/cones</id>
    <content type="html">&lt;p&gt;&lt;strong&gt;Definition.&lt;/strong&gt; A &lt;strong&gt;cone&lt;/strong&gt; is a set &lt;script type=&quot;math/tex&quot;&gt;K&lt;/script&gt; such that &lt;script type=&quot;math/tex&quot;&gt;x \in K
-\implies \theta x \in K, \; \forall \theta \geq 0&lt;/script&gt; &lt;a href=&quot;/texts/Convex Optimization [Boyd].pdf&quot;&gt;[BV04]&lt;/a&gt;&lt;/p&gt;
+\implies \theta x \in K, \; \forall \theta \geq 0&lt;/script&gt; &lt;a href=&quot;/optimization/texts/Convex Optimization [Boyd].pdf&quot;&gt;[BV04]&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Definition.&lt;/strong&gt; A &lt;strong&gt;convex cone&lt;/strong&gt; is a cone that is also convex:
 &lt;script type=&quot;math/tex&quot;&gt;\theta x + (1 - \theta) y \in K&lt;/script&gt; if &lt;script type=&quot;math/tex&quot;&gt;x, y \in K&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\theta \geq 0&lt;/script&gt;.&lt;/p&gt;
@@ -985,7 +985,7 @@ training.
 &lt;p&gt;Why do we care about cones?&lt;/p&gt;
 
 &lt;p&gt;Cones are “among the simplest convex sets” – think of them as the analog of
-subspaces in linear analysis for convex analysis &lt;a href=&quot;/texts/Convex Analysis and Minimization Algorithms I.pdf&quot;&gt;[HU91]&lt;/a&gt;. Note that
+subspaces in linear analysis for convex analysis &lt;a href=&quot;/optimization/texts/Convex Analysis and Minimization Algorithms I.pdf&quot;&gt;[HU91]&lt;/a&gt;. Note that
 a subspace is a convex cone, but a convex cone is not necessarily a subspace.
 Indeed, the only thing that prevents a convex cone from being a subspace is
 symmetry (it is not necessarily the case that &lt;script type=&quot;math/tex&quot;&gt;K = -K&lt;/script&gt;).&lt;/p&gt;
@@ -1035,7 +1035,7 @@ the other.&lt;/p&gt;
    <content type="html">&lt;h2 id=&quot;projections-onto-closed-convex-sets&quot;&gt;Projections onto Closed Convex Sets&lt;/h2&gt;
 &lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\newcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
 \newcommand{\inner}[2]{\langle{#1}, {#2}\rangle}&lt;/script&gt;A projection onto nonempty
-closed convex set &lt;script type=&quot;math/tex&quot;&gt;C&lt;/script&gt; is &lt;em&gt;unique&lt;/em&gt; &lt;a href=&quot;/texts/Convex Analysis and Minimization Algorithms I.pdf&quot;&gt;[U91]&lt;/a&gt;.&lt;/p&gt;
+closed convex set &lt;script type=&quot;math/tex&quot;&gt;C&lt;/script&gt; is &lt;em&gt;unique&lt;/em&gt; &lt;a href=&quot;/optimization/texts/Convex Analysis and Minimization Algorithms I.pdf&quot;&gt;[U91]&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Theorem 1.&lt;/strong&gt; &lt;script type=&quot;math/tex&quot;&gt;y_x \in C&lt;/script&gt; is the projection of &lt;script type=&quot;math/tex&quot;&gt;x&lt;/script&gt; onto &lt;script type=&quot;math/tex&quot;&gt;C&lt;/script&gt; iff&lt;/p&gt;
 
@@ -1228,7 +1228,7 @@ Then &lt;script type=&quot;math/tex&quot;&gt;u \in \operatorname{Im} P&lt;/scrip
 &lt;/ol&gt;
 
 &lt;p&gt;A projection is &lt;strong&gt;orthogonal&lt;/strong&gt; if its image and kernel are orthogonal
-subspaces &lt;a href=&quot;/texts/Linear Algebra Done Right.pdf&quot;&gt;Linear Algebra Done Right&lt;/a&gt; for a good treatment).
+subspaces &lt;a href=&quot;/optimization/texts/Linear Algebra Done Right.pdf&quot;&gt;Linear Algebra Done Right&lt;/a&gt; for a good treatment).
 More concretely, if &lt;script type=&quot;math/tex&quot;&gt;(e_1, \ldots, e_m)&lt;/script&gt; is an orthonormal basis of &lt;script type=&quot;math/tex&quot;&gt;U&lt;/script&gt;,
 then for &lt;script type=&quot;math/tex&quot;&gt;v \in V&lt;/script&gt;&lt;/p&gt;
 
@@ -1282,9 +1282,9 @@ operators&lt;/strong&gt;.&lt;/p&gt;
    <id>/2016/10/12/364b-lecture-notes</id>
    <content type="html">&lt;script type=&quot;math/tex; mode=display&quot;&gt;\newcommand{\dist}{\textbf{dist}}&lt;/script&gt;
 
-&lt;h2 id=&quot;subgradient-methodslecturenotessubgradmethodnotespdf&quot;&gt;&lt;a href=&quot;/lecture_notes/subgrad_method_notes.pdf&quot;&gt;Subgradient Methods&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;subgradient-methodsoptimizationlecturenotessubgradmethodnotespdf&quot;&gt;&lt;a href=&quot;/optimization/lecture_notes/subgrad_method_notes.pdf&quot;&gt;Subgradient Methods&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;Polykak’s step length&lt;/strong&gt; is a neat way of choosing an ‘optimal’ step size for
-&lt;a href=&quot;/lecture_notes/subgrad_method_notes.pdf&quot;&gt;subgradient methods&lt;/a&gt;.
+&lt;a href=&quot;/optimization/lecture_notes/subgrad_method_notes.pdf&quot;&gt;subgradient methods&lt;/a&gt;.
 The step size is&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\alpha_k = \frac{
@@ -1312,7 +1312,7 @@ Euclidean projection onto &lt;script type=&quot;math/tex&quot;&gt;C&lt;/script&g
    <link href="/2016/10/07/optimization-methods-bertsekas/"/>
    <updated>2016-10-07T00:00:00-07:00</updated>
    <id>/2016/10/07/optimization-methods-bertsekas</id>
-   <content type="html">&lt;p&gt;&lt;a href=&quot;/texts/Convex-Optimization-Algorithms-Supplement.pdf&quot;&gt;Convex Optimization Algorithms&lt;/a&gt;&lt;/p&gt;
+   <content type="html">&lt;p&gt;&lt;a href=&quot;/optimization/texts/Convex-Optimization-Algorithms-Supplement.pdf&quot;&gt;Convex Optimization Algorithms&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Most algorithms for minimizing convex &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt; over a convex set &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt; make use
 of at least one of the following techniques:&lt;/p&gt;
@@ -1431,7 +1431,7 @@ S_k = \{(x, w) \mid x \in X, F_k(x) \leq w \leq \tilde{f}_k\}
 &lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;\tilde{f}_k = \min_{i \leq k} f(x_i)&lt;/script&gt; is the best upper bound of
 the optimal value found so far.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/central-cutting-plane.png&quot; style=&quot;margin:auto&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/optimization/assets/central-cutting-plane.png&quot; style=&quot;margin:auto&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;the &lt;em&gt;analytic center of S_k&lt;/em&gt; is one choice for the central point.&lt;/li&gt;
@@ -1442,8 +1442,8 @@ interior point methods &lt;span class=&quot;todo&quot;&gt;(?)&lt;/span&gt;&lt;/l
 &lt;p&gt;&lt;span class=&quot;meta-text&quot;&gt;randomized algorithms seem like they could help make
 cutting plane methods more computationally tractable. It seems like I’m not
 the first to make this observation. Bertsekas published a seminal paper about
-using &lt;a href=&quot;/papers/Solving-Convex-Programs-by-Random-Walks.pdf&quot;&gt;random walks for convex optimization&lt;/a&gt;. A more
-recent paper looked at a similar problem (&lt;a href=&quot;/papers/A-Randomized-Cutting-Plane-Method.pdf&quot;&gt;A Randomized Cutting Plane Method&lt;/a&gt;).
+using &lt;a href=&quot;/optimization/papers/Solving-Convex-Programs-by-Random-Walks.pdf&quot;&gt;random walks for convex optimization&lt;/a&gt;. A more
+recent paper looked at a similar problem (&lt;a href=&quot;/optimization/papers/A-Randomized-Cutting-Plane-Method.pdf&quot;&gt;A Randomized Cutting Plane Method&lt;/a&gt;).
 &lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Inner Linearization: Simplical Decomposition&lt;/em&gt;&lt;/p&gt;
@@ -1784,7 +1784,7 @@ by reducing to a sequence of linear equality constrained problems.&lt;/li&gt;
 
 &lt;p&gt;The idea of a &lt;strong&gt;barrier&lt;/strong&gt; is intuitive ~&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/log-barrier.png&quot; style=&quot;margin:auto&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/optimization/assets/log-barrier.png&quot; style=&quot;margin:auto&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;A point &lt;script type=&quot;math/tex&quot;&gt;x^*(t)&lt;/script&gt; on the &lt;em&gt;central point&lt;/em&gt; is at most &lt;script type=&quot;math/tex&quot;&gt;m/t&lt;/script&gt; suboptimal, &lt;script type=&quot;math/tex&quot;&gt;m&lt;/script&gt; the
 number of inequality constraints. The barrier method conveniently gives us dual feasible points along the way (see [BV04] for details).&lt;/p&gt;

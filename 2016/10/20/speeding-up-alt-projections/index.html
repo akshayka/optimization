@@ -15,17 +15,17 @@
   </title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/public/css/poole.css">
-  <link rel="stylesheet" href="/public/css/syntax.css">
-  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/optimization/public/css/poole.css">
+  <link rel="stylesheet" href="/optimization/public/css/syntax.css">
+  <link rel="stylesheet" href="/optimization/public/css/lanyon.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
 
   <!-- Icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
-  <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/optimization/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/optimization/public/favicon.ico">
 
   <!-- RSS -->
-  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/optimization/atom.xml">
 
   <!-- Latex Macros -->
   <p hidden>
@@ -84,7 +84,7 @@
   </div>
 
   <nav class="sidebar-nav">
-    <a class="sidebar-nav-item" href="/">Home</a>
+    <a class="sidebar-nav-item" href="/optimization/">Home</a>
 
     
 
@@ -96,7 +96,7 @@
     
       
         
-          <a class="sidebar-nav-item" href="/about/">About</a>
+          <a class="sidebar-nav-item" href="/optimization/about/">About</a>
         
       
     
@@ -104,7 +104,7 @@
     
       
         
-          <a class="sidebar-nav-item" href="/daily-sketch/">Daily Sketch</a>
+          <a class="sidebar-nav-item" href="/optimization/daily-sketch/">Daily Sketch</a>
         
       
     
@@ -112,19 +112,19 @@
     
       
         
-          <a class="sidebar-nav-item" href="/lecture-notes/">Lecture Notes</a>
+          <a class="sidebar-nav-item" href="/optimization/lecture-notes/">Lecture Notes</a>
         
       
     
       
         
-          <a class="sidebar-nav-item" href="/papers/">Papers</a>
+          <a class="sidebar-nav-item" href="/optimization/papers/">Papers</a>
         
       
     
       
         
-          <a class="sidebar-nav-item" href="/tags/">Tags</a>
+          <a class="sidebar-nav-item" href="/optimization/tags/">Tags</a>
         
       
     
@@ -156,7 +156,7 @@
           <label for="sidebar-checkbox" class="sidebar-toggle"></label>
 
           <h3 class="masthead-title">
-            <a href="/" title="Home">Convex Optimization</a>
+            <a href="/optimization/" title="Home">Convex Optimization</a>
             <small>Research Notebook</small>
           </h3>
         </div>
@@ -168,17 +168,17 @@
   <span class="post-date">20 Oct 2016</span>
   <div class="tags">
     
-      [<a href="/tags#subgradients" class="tag">subgradients</a>]
+      [<a href="/optimization/tags#subgradients" class="tag">subgradients</a>]
     
-      [<a href="/tags#alternating-projections" class="tag">alternating-projections</a>]
+      [<a href="/optimization/tags#alternating-projections" class="tag">alternating-projections</a>]
     
-      [<a href="/tags#dykstra" class="tag">dykstra</a>]
+      [<a href="/optimization/tags#dykstra" class="tag">dykstra</a>]
     
-      [<a href="/tags#QP" class="tag">QP</a>]
+      [<a href="/optimization/tags#QP" class="tag">QP</a>]
     
-      [<a href="/tags#cones" class="tag">cones</a>]
+      [<a href="/optimization/tags#cones" class="tag">cones</a>]
     
-      [<a href="/tags#affine-sets" class="tag">affine-sets</a>]
+      [<a href="/optimization/tags#affine-sets" class="tag">affine-sets</a>]
     
   </div>
   <br/>
@@ -203,7 +203,7 @@ exponential, …)</li>
 
 <!--more-->
 
-<h2 id="dykstras-method-d83d83">Dykstra’s Method <a href="/papers/Dykstra - An Algorithm for Restricted Least Squares Regression.pdf">[D83]</a></h2>
+<h2 id="dykstras-method-d83d83">Dykstra’s Method <a href="/optimization/papers/Dykstra - An Algorithm for Restricted Least Squares Regression.pdf">[D83]</a></h2>
 <p>Goal: Find a least squares projection onto a convex set.</p>
 
 <h3 id="preliminaries">Preliminaries</h3>
@@ -218,7 +218,7 @@ alternating projections).</p>
 
 <h3 id="the-algorithm">The Algorithm</h3>
 
-<p>… <a href="/papers/Dykstra - An Algorithm for Restricted Least Squares Regression.pdf">[D83]</a> is old, and the result actually holds for projecting onto
+<p>… <a href="/optimization/papers/Dykstra - An Algorithm for Restricted Least Squares Regression.pdf">[D83]</a> is old, and the result actually holds for projecting onto
 the intersection of general closed convex sets (not necessarily cones). A
 natural way to think about the process is that the projections are
 “pulled back” before re-projecting. So say we are projecting onto <script type="math/tex">C \cap D</script>,
@@ -234,7 +234,7 @@ where <script type="math/tex">q_1 := \tilde{y_0} - x_1</script>,
 <script type="math/tex">\tilde{y_0} = y_0</script>. Then we take <script type="math/tex">x_2 = P_C(\tilde{y_1})</script>, and we continue
 this process until convergence.</p>
 
-<p><img src="/assets/dykstra_algorithm.png" style="margin:auto" /></p>
+<p><img src="/optimization/assets/dykstra_algorithm.png" style="margin:auto" /></p>
 
 
 </div>

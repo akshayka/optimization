@@ -167,6 +167,64 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/optimization/2017/01/29/averaged-projections-pf-sketch/">
+        Proof Sketch: Outer Approximation Acceleration of Averaged Projections
+      </a>
+    </h1>
+    <span class="post-date">29 Jan 2017</span>
+	<div class="post-date">
+	
+	  [<a href="/optimization/tags#averaged-projections" class="tag">averaged-projections</a>]
+	
+	  [<a href="/optimization/tags#proof" class="tag">proof</a>]
+	
+	  [<a href="/optimization/tags#QP" class="tag">QP</a>]
+	
+	  [<a href="/optimization/tags#acceleration" class="tag">acceleration</a>]
+	
+	</div>
+	<p>A simple but potentially powerful acceleration scheme: perform averaged
+projections and then solve a small QP in which you project the averaged
+iterate onto the intersection of the halfspaces that the projection
+nets you. It is not difficult to show that this algorithm converges
+to an optimal solution. Below is a proof sketch.</p>
+
+<p><img src="/optimization/assets/acc-avg-proj.jpg" style="max-height:100%; max-width:100%" /></p>
+
+
+	
+		<a href="/optimization/2017/01/29/averaged-projections-pf-sketch/">Read more</a>
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/optimization/2017/01/23/key-steps-alt-proj-pf/">
+        Key Steps in the Proof of Alternating Projections
+      </a>
+    </h1>
+    <span class="post-date">23 Jan 2017</span>
+	<div class="post-date">
+	
+	  [<a href="/optimization/tags#proof" class="tag">proof</a>]
+	
+	  [<a href="/optimization/tags#convergence" class="tag">convergence</a>]
+	
+	  [<a href="/optimization/tags#alternating-projections" class="tag">alternating-projections</a>]
+	
+	</div>
+	<p>An analysis of the proof of Von Neumann’s alternating projections algorithm.</p>
+
+<p><img src="/optimization/assets/key-steps-alt-proj-pf.jpg" style="max-height:100%; max-width:100%" /></p>
+
+
+	
+		<a href="/optimization/2017/01/23/key-steps-alt-proj-pf/">Read more</a>
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/optimization/2016/12/07/ap-first-results/">
         First results for alternating projection acceleration
       </a>
@@ -275,6 +333,8 @@ velocity and the current one. Again, very anecdotal evidence.</p>
     still stands.</p>
 
 	
+		<a href="/optimization/2016/12/07/ap-first-results/">Read more</a>
+	
   </div>
   
   <div class="post">
@@ -356,6 +416,8 @@ homogeneous embedding in order to recover the feasibility problem, however.</li>
 </ul>
 
 	
+		<a href="/optimization/2016/11/09/visual-checklist/">Read more</a>
+	
   </div>
   
   <div class="post">
@@ -385,123 +447,7 @@ happening here</p>
 
 
 	
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/optimization/2016/11/09/borwein-survey/">
-        Bauschke Survey on Projection Algorithms
-      </a>
-    </h1>
-    <span class="post-date">09 Nov 2016</span>
-	<div class="post-date">
-	
-	  [<a href="/optimization/tags#bauschke" class="tag">bauschke</a>]
-	
-	  [<a href="/optimization/tags#borwein" class="tag">borwein</a>]
-	
-	  [<a href="/optimization/tags#feasibility" class="tag">feasibility</a>]
-	
-	  [<a href="/optimization/tags#projections" class="tag">projections</a>]
-	
-	</div>
-	<p><a href="/optimization/papers/Projection Methods and Monotone Operators.pdf">Source: Bauschke’s Projection Methods and Monotone Operators</a></p>
-
-<h3 id="preliminaries">Preliminaries</h3>
-<p>A mapping <script type="math/tex">T</script> is a <strong>non-expansive operator</strong> if it is always true that</p>
-
-<script type="math/tex; mode=display">\norm{Tx - Ty} \leq \norm{x - y}.</script>
-
-<p>It is <em>strictly</em> non-expansive if the above inequality is strict, and it
-is an <strong>isometry</strong> if the relation always holds with equality. The set
-of <strong>fixed points</strong> of a non-expansive mapping <script type="math/tex">T</script> is defined as</p>
-
-<script type="math/tex; mode=display">\fix{T} = \{x \mid x = Tx \}.</script>
-
-<p>A useful fact is that convex combinations of non-expansive mappings are also
-non-expansive. <script type="math/tex">T</script> is a <strong>firmly non-expansive operator</strong> if it can be written
-as <script type="math/tex">T = 1/2I + 1/2N</script>, <script type="math/tex">I</script> the identity and <script type="math/tex">N</script> a non-expansive operator.</p>
-
-<p>For <strong>C</strong> a closed convex non-empty subset of the larger space <script type="math/tex">X</script>, the
-orthogonal projection operator <script type="math/tex">P_C</script> is firmly non-expansive and, if <script type="math/tex">x \in X</script>,
-then <script type="math/tex">P_C x \in C</script> and in particular <script type="math/tex">\inner{y - P_C x}{c - P_C x} \leq 0, \;
-\forall y \in C</script>.</p>
-
-<p>A sequence <script type="math/tex">(x_n)</script> converges linearly to its limit <script type="math/tex">x</script> with rate
-<script type="math/tex">\beta \in [0, 1)</script> if <script type="math/tex">\exists \alpha \geq 0</script> such that</p>
-
-<script type="math/tex; mode=display">\norm{x_n - x} \leq \alpha \beta^n, \; \forall n.</script>
-
-<p>(The above implies that <script type="math/tex">\norm{x_n - x}/\norm{x_{n-1} - x} \leq \beta</script>.)</p>
-
-<h2 id="attracting-mappings-monotone-sequences">2. Attracting mappings, monotone sequences.</h2>
-
-<p><script type="math/tex">T \colon D \rightarrow D</script>, <script type="math/tex">D</script> a closed convex non-empty set and <script type="math/tex">T</script>
-non-expansive, is <strong>attracting</strong> with respect to <script type="math/tex">F</script> if
-<script type="math/tex">\forall x \in D \setminus F, f \in F</script>,</p>
-
-<script type="math/tex; mode=display">% <![CDATA[
-\norm{Tx - f} < \norm{x - f}. %]]></script>
-
-<p>The intuition is that <script type="math/tex">T</script> brings every <script type="math/tex">x \in D \setminus F</script> closer to <script type="math/tex">F</script>. 
-<script type="math/tex">T</script> is <em>strongly attracting</em> or <script type="math/tex">\kappa</script>-attracting with respect to <script type="math/tex">F</script> if
-<script type="math/tex">\exists \kappa > 0</script> such that</p>
-
-<script type="math/tex; mode=display">\kappa\norm{x - Tx}^2 \leq \norm{x-f}^2 - \norm{Tx - f}^2.</script>
-
-<p>Nice, intuitive things can be said about the composition of attracting
-operators. For example, the fixed set of a composition is the intersection
-of the fixed sets of each operator, and the composition of attracting operators
-is itself attracting. Similarly for convex combinations of attracting operators.</p>
-
-<p>A sequence <script type="math/tex">(x_n)</script> is <strong>Féjer monotone</strong> with respect to a closed convex
-non-empty set <script type="math/tex">C</script> if</p>
-
-<script type="math/tex; mode=display">\norm{x_{n+1} - c} \leq \norm{x_n - c} \; \forall c \in C, n \geq 0.</script>
-
-<h3 id="subgradient-algorithms">Subgradient Algorithms</h3>
-<p>These are a class of algorithms for when it is hard to project onto the
-target convex set. Instead, project onto a first-order approximation of the
-set.</p>
-
-	
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/optimization/2016/10/30/admm/">
-        ADMM
-      </a>
-    </h1>
-    <span class="post-date">30 Oct 2016</span>
-	<div class="post-date">
-	
-	  [<a href="/optimization/tags#admm" class="tag">admm</a>]
-	
-	  [<a href="/optimization/tags#distributed-optimization" class="tag">distributed-optimization</a>]
-	
-	  [<a href="/optimization/tags#feasibility" class="tag">feasibility</a>]
-	
-	  [<a href="/optimization/tags#projections" class="tag">projections</a>]
-	
-	</div>
-	<h3 id="introduction">Introduction</h3>
-<ul>
-  <li>Common characteristics of big data:
-    <ul>
-      <li>large (billions of examples)</li>
-      <li>high dimensional</li>
-      <li>stored and/or collected in a distributed fashion</li>
-    </ul>
-  </li>
-  <li><script type="math/tex">\exists</script> need for rich, scalable algorithms</li>
-  <li>a <em>decomposition-coordination</em> procedure: solutions to local subproblems are
-coordinated to find solution to global problem</li>
-</ul>
-
-
-	
-		<a href="/optimization/2016/10/30/admm/">Read more</a>
+		<a href="/optimization/2016/11/09/qp-alt-proj/">Read more</a>
 	
   </div>
   

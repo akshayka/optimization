@@ -136,8 +136,10 @@
     
       
     
+      
+    
 
-    <a class="sidebar-nav-item" href="https://github.com/akshayka/optimization-notebook">GitHub project</a>
+    <a class="sidebar-nav-item" href="https://github.com/akshayka/projection_methods">GitHub project</a>
   </nav>
 
   <div class="sidebar-item">
@@ -167,6 +169,179 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/optimization/2017/02/07/averaged-projections-experiments/">
+        Accelerating von Neumann's Alternating Projections Algorithm for Convex Feasibility
+      </a>
+    </h1>
+    <span class="post-date">07 Feb 2017</span>
+	<div class="post-date">
+	
+	  [<a href="/optimization/tags#averaged-projections" class="tag">averaged-projections</a>]
+	
+	  [<a href="/optimization/tags#acceleration" class="tag">acceleration</a>]
+	
+	  [<a href="/optimization/tags#QPs" class="tag">QPs</a>]
+	
+	</div>
+	<p><em>The code for my experiments and algorithm is hosted on
+<a href="https://www.github.com/akshayka/projection_methods">github</a>.</em></p>
+
+<p>My research focuses on accelerating the alternating projections algorithm
+for finding a point in the intersection of convex sets. The algorithm,
+due to Jon von Neumann, is beautifully simple: just
+alternatingly project the iterate onto your convex sets until it converges
+to an optimal point, where optimality is obtained if and only if the iterate
+lies in the intersection of the convex sets.</p>
+
+<p>Aside from aesthetics, I am interested in the work because it is practical:
+<em>the majority of convex optimization problems can be reduced to solving this
+problem.</em> As such, this method is relevant to control, finance, and
+machine learning, to name but a few fields.</p>
+
+<p>Under the guidance of <a href="http://stanford.edu/~boyd/">Professor Stephen Boyd</a>,
+I have devised a class of
+modifications to the alternating projections method that is provably correct.
+These modifications are guaranteed to take at most the number of iterations
+that the vanilla algorithm takes and, though I have not yet theoretically verified
+this, should take many fewer in most cases. The trade-off is that our version
+of the algorithm requires us to solve three projections per iteration instead
+of two; that said, the extra projection can be computed extremely cheaply.</p>
+
+<p>In this post, I motivate the problem by illustrating a shortcoming of
+the alternating projections method (convergence rapidly slows down as
+the iterates approach optimality). I then propose an algorithm that
+takes inspiration from the alternating projections method and provably
+converges to an optimal point in the intersection of the convex sets in
+question; the high-level idea is to solve a small quadratic program after
+each pair of projections. There is much work left to be done,
+and I close by listing the tasks that remain.</p>
+
+<h2 id="motivation">Motivation</h2>
+<p>The appeal of the alternating projection algorithm lies in its simplicity. But,
+like other first-order methods, its
+convergence can be rather slow. Especially towards the tail end of the
+algorithm, you’ll find that the iterate often bounces back and forth between
+the convex sets without making much forward progress towards the intersection;
+if you come from the deep learning community, you can think of this problem
+as somewhat analogous to the vanishing gradient problem.</p>
+
+<p>The problem is best illustrated through example. Below is a run of the alternating
+projections algorithm where the goal is to find a point in the intersection
+of two circles. The algorithm begins with an initial iterate at <script type="math/tex">(0, 10)</script>.</p>
+
+<p><img src="/optimization/assets/20170207-ap_circle.png" style="max-height:100%; max-width:100%" /></p>
+
+<p>Notice how the iterate makes good progress at first but then gets stuck
+zigzagging between the two sets as it approaches the intersection. This
+slow convergence makes the algorithm impractical in many problem domains,
+especially where high accuracy is required.</p>
+
+<p>So here’s the key question: Can we come up with a cheap modification to the
+alternating projection algorithm that prevents the sequence of iterates from
+degenerating into a zigzag trajectory?</p>
+
+<h2 id="the-algorithm">The Algorithm</h2>
+
+<p>For the remainder of this post, I will assume that the inputs to my
+algorithm are an affine set <script type="math/tex">\mathcal{A}</script> and a convex cone <script type="math/tex">\mathcal{K}</script>.
+This assumption is not really an important one – the algorithm is correct
+so long as both sets are convex. But it turns out that almost all practical
+convex optimization problems can be reduced to finding a point in the
+intersection of an affine set and a convex cone, hence the assumption.
+In full specificity, the problem set-up is:</p>
+
+<p><strong>Input</strong>: An affine set <script type="math/tex">\mathcal{A}</script> and a convex cone <script type="math/tex">\mathcal{K}</script>.</p>
+
+<p><strong>Goal</strong>: Find a point <script type="math/tex">x \in \mathcal{A} \cap \mathcal{K}</script>.</p>
+
+<p>The initial iterate <script type="math/tex">z_0</script> may be chosen randomly. Let <script type="math/tex">\Pi_{\mathcal{A}}</script> be
+the projection operator onto <script type="math/tex">\mathcal{A}</script> and let be <script type="math/tex">\Pi_\mathcal{K}</script> the
+projection operator onto <script type="math/tex">\mathcal{K}</script>. Let <script type="math/tex">z_k</script> be the <script type="math/tex">k</script>-th iterate.
+After the <script type="math/tex">k</script>-th step of the algorithm, perform the following updates:</p>
+
+<script type="math/tex; mode=display">q_k = \Pi_{\mathcal{A}}(z_k),
+\quad r_k = \Pi_{\mathcal{K}}(z_k),
+\quad s_k = \frac{1}{2}(q_k + r_k).</script>
+
+<p>In other words, <script type="math/tex">s_k</script> is the iterate that would be obtained by averaged
+projections. (It is easy to show that averaged projections is equivalent to
+alternating projections.) In order to accelerate convergence, before performing
+the next averaged projection iteration, we will project <script type="math/tex">s_k</script> onto the
+intersection of a number of halfspaces that contain
+<script type="math/tex">\mathcal{A} \cap \mathcal{K}</script>. More concretely, let
+let <script type="math/tex">\tilde{A} = \{x \mid (z_k - q_k)^T(x - q_k) \leq 0\}</script> be the halfspace
+containing <script type="math/tex">\mathcal{A}</script> and let
+<script type="math/tex">\tilde{K} = \{x \mid (z_k - r_k)^T(x - r_k) \leq 0\}</script> be the halfspace containing
+<script type="math/tex">\mathcal{K}</script>. After obtaining these halfspaces, we can generate the
+next iterate by projecting <script type="math/tex">s_k</script> onto their intersection; that is,
+<script type="math/tex">z_{k+1} = \Pi_{\tilde{A} \cap \tilde{K}}(s_k)</script>.</p>
+
+<p>It is not hard to prove that the above algorithm converges to an optimal
+solution of the feasibility problem; my previous post has a very rough
+proof sketch. I will post a complete proof sometime later.</p>
+
+<p>There are many tweaks to the above algorithm that preserve convergence and may
+accelerate it; for example, we can choose to keep all the halfspaces
+and project onto the intersection of <script type="math/tex">2k</script> halfspaces on the <script type="math/tex">k</script>-th
+iteration. Empirical results I’ve run suggest that doing so accelerates
+convergence. Doing so also increases the cost of each iteration, but I
+suspect the overhead is not sufficient. For example, see
+<a href="/optimization/2016/10/24/boyd/">this post</a>
+in which I discuss how to solve the projection cheaply.</p>
+
+<p>This algorithm improves upon the vanilla version in the two-dimensional case.
+Below is a run of my algorithm on the problem we saw in the previous section.</p>
+
+<p><img src="/optimization/assets/20170207-qp_circle.png" style="max-height:100%; max-width:100%" /></p>
+
+<h2 id="results">Results</h2>
+<p>The results of a toy experiment I’ve run are promising and are plotted below;
+the x-axis is the iteration number and the y-axis is the distance from
+the iterate to the intersection. Experiments were run on a 1000 dimensional affine space
+and a 1000 dimensional second order cone. I compared the performance
+of my algorithm, both when only two halfspaces are retained and when
+all of the halfspaces are retained, with the alternating projections
+algorithm and the state-of-the-art Dykstra’s algorithm. It is evident that
+keeping more halfspaces helps, at least in this experiment. (You can
+ignore the “ip (1.00)” label in the legend – it stands for
+“include the next halfspace with probability 1.0” and is a remnant from
+experiments with a randomized version of the algorithm.)</p>
+
+<p><img src="/optimization/assets/20170207-avg-proj-exp.png" style="max-height:100%; max-width:100%" /></p>
+
+<p>I also want to answer the question whether momentum updates may help prevent
+the QP algorithm that projections onto pairs of halfspaces from encountering
+the same problems that vanilla averaged projections encounters. I hypothesize
+that momentum will help, but my preliminary results below do not support my
+hypothesis.</p>
+
+<p><img src="/optimization/assets/20170207-avg-proj-momentum-exp.png" style="max-height:100%; max-width:100%" /></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>My work is preliminary but promising: the algorithm I presented
+is but one example of an acceleration we can apply to the alternating projection
+method. There are many other things we could try, and their justifications
+fall out from the proof of my algorithm (I will post the proof soon!).</p>
+
+<h2 id="future-work">Future Work</h2>
+<p>There’s a ton of future work to be done. Here’s a partial list:</p>
+<ul>
+  <li>Analyze the algorithm’s rate of convergence.</li>
+  <li>Attempt to do a cheap line search or plane search to even further accelerate
+convergence.</li>
+  <li>Run experiments on larger problems.</li>
+  <li>Implement a production-quality version of my algorithm, roll it into SCS,
+and evaluate it on Mark’s test suite.</li>
+</ul>
+
+<p>Unrelated to this work, I’m also helping Steven Diamond with the design and
+implementation of CVXPY 1.0.</p>
+
+	
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/optimization/2017/01/29/averaged-projections-pf-sketch/">
         Proof Sketch: Outer Approximation Acceleration of Averaged Projections
       </a>
@@ -193,8 +368,6 @@ to an optimal solution. Below is a proof sketch.</p>
 
 
 	
-		<a href="/optimization/2017/01/29/averaged-projections-pf-sketch/">Read more</a>
-	
   </div>
   
   <div class="post">
@@ -218,8 +391,6 @@ to an optimal solution. Below is a proof sketch.</p>
 <p><img src="/optimization/assets/key-steps-alt-proj-pf.jpg" style="max-height:100%; max-width:100%" /></p>
 
 
-	
-		<a href="/optimization/2017/01/23/key-steps-alt-proj-pf/">Read more</a>
 	
   </div>
   
@@ -333,8 +504,6 @@ velocity and the current one. Again, very anecdotal evidence.</p>
     still stands.</p>
 
 	
-		<a href="/optimization/2016/12/07/ap-first-results/">Read more</a>
-	
   </div>
   
   <div class="post">
@@ -415,39 +584,6 @@ homogeneous embedding in order to recover the feasibility problem, however.</li>
   <li>To the best of my knowledge, none exist!</li>
 </ul>
 
-	
-		<a href="/optimization/2016/11/09/visual-checklist/">Read more</a>
-	
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/optimization/2016/11/09/qp-alt-proj/">
-        Literature Review: QP + Alternating Projections
-      </a>
-    </h1>
-    <span class="post-date">09 Nov 2016</span>
-	<div class="post-date">
-	
-	  [<a href="/optimization/tags#quadratic-programming" class="tag">quadratic-programming</a>]
-	
-	  [<a href="/optimization/tags#QPs" class="tag">QPs</a>]
-	
-	  [<a href="/optimization/tags#alternating-projections" class="tag">alternating-projections</a>]
-	
-	  [<a href="/optimization/tags#literature-review" class="tag">literature-review</a>]
-	
-	</div>
-	<p>Fukushima (A finitely convergent algorithm for convex inequalities)
-– a subgradient method</p>
-
-<p>Bauschke + Borwein also propose a subgradient method (subgradient to get
-outer approximation of set, then project onto it) – feels very similar to what’s
-happening here</p>
-
-
-	
-		<a href="/optimization/2016/11/09/qp-alt-proj/">Read more</a>
 	
   </div>
   
